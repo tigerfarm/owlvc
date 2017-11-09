@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#954C08</color>
+    <color name="colorPrimaryDark">#954C08</color>
+    <color name="colorAccent">#E7C9B1</color>
+    <color name="colorWhite">#FFFFFF</color>
+
+    <color name="listTextDivider">#D98839</color>
+    <color name="listText">#000618</color>
+    <color name="listBackgroundIncoming">#e1e1e1</color>
+    <color name="listBackground">#FFFFFF</color>
+
+    <color name="buttonTextColor">#FFFFFF</color>
+    <color name="buttonBackgroundColor">#954C08</color>
+</resources>
