@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:focusableInTouchMode="true"
+    tools:context="com.twilio.voice.quickstart.VoiceActivity">
+
+    <FrameLayout
+        android:id="@+id/numberform"
+        android:background="@drawable/borders_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- ==================================================== -->
+        <TextView
+            android:id="@+id/labelToken"
+            android:text="Phone number, Client id, or SIP address"
+            android:layout_below="@+id/TwilioSid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:textColor="#000000"
+            android:textSize="14sp"/>
+        <EditText
+            android:id="@+id/formPhoneNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="1650866"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/call_action_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="@dimen/activity_horizontal_marginBottom"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:src="@drawable/ic_call_white_24px"
+            android:visibility="invisible" />
+
+    </FrameLayout>
+
+    <!-- ==================================================== -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+
+        <Chronometer
+            android:id="@+id/chronometer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="73dp"
+            android:textColor="@color/colorAccent"
+            android:textSize="20dp"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+    <!-- ==================================================== -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="110dp"
+        android:orientation="vertical">
+        <include layout="@layout/content_voice" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="bottom|right"
+        android:orientation="vertical">
+
+        <!-- ==================================================== -->
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/speakerphone_action_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:src="@drawable/ic_volume_down_white_24px"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:visibility="invisible" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/hangup_action_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:src="@drawable/ic_call_end_white_24px"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:visibility="invisible" />
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
+
