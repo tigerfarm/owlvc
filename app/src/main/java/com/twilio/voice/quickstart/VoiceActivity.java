@@ -179,7 +179,6 @@ public class VoiceActivity extends AppCompatActivity {
     }
 
     // ---------------------------------------------------------------------------------------------
-    // From: https://www.android-examples.com/get-show-all-phone-contacts-into-listview-in-android/
 
     public void LoadContacts(){
         StoreContacts.clear();
