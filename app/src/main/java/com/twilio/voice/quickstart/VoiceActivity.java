@@ -155,7 +155,7 @@ public class VoiceActivity extends AppCompatActivity {
         // Load Contacts into ListView.
         StoreContacts = new ArrayList<String>();
         listView = (ListView)findViewById(R.id.listview1);
-        EnableRuntimePermission();
+        EnableContactPermission();
         LoadContacts();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -179,6 +179,61 @@ public class VoiceActivity extends AppCompatActivity {
     }
 
     // ---------------------------------------------------------------------------------------------
+    // Access permissions
+
+    public void EnableContactPermission(){
+        if ( ActivityCompat.shouldShowRequestPermissionRationale( VoiceActivity.this, Manifest.permission.READ_CONTACTS) ) {
+            Snackbar.make(coordinatorLayout, "+ CONTACTS permission allows us to Access CONTACTS app.", Snackbar.LENGTH_LONG).show();
+        } else {
+            ActivityCompat.requestPermissions( VoiceActivity.this, new String[] {
+                    Manifest.permission.READ_CONTACTS}, RequestPermissionCode );
+        }
+    }
+
+    private boolean checkPermissionForMicrophone() {
+        int resultMic = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
+        return resultMic == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPermissionForMicrophone() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
+            Snackbar.make(coordinatorLayout,
+                    "Microphone permissions needed. Please allow in your application settings.",
+                    SNACKBAR_DURATION).show();
+        } else {
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.RECORD_AUDIO},
+                    MIC_PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        // Check if microphone permissions are granted
+        if (requestCode == MIC_PERMISSION_REQUEST_CODE && permissions.length > 0) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Snackbar.make(coordinatorLayout,
+                        "Microphone permissions needed. Please allow in your application settings.",
+                        SNACKBAR_DURATION).show();
+            } else {
+                registerForCallInvites();
+            }
+        }
+
+        // Check if contacts access permissions are granted
+        if (requestCode == RequestPermissionCode && permissions.length > 0) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Snackbar.make(coordinatorLayout, "+ Permission Canceled, your application cannot access CONTACTS.", Snackbar.LENGTH_LONG).show();
+            } else {
+                // Snackbar.make(coordinatorLayout, "+ Permission Granted, Now your application can access CONTACTS.", Snackbar.LENGTH_LONG).show();
+            }
+        }
+
+    }
+
+    // ---------------------------------------------------------------------------------------------
 
     public void LoadContacts(){
         StoreContacts.clear();
@@ -196,15 +251,6 @@ public class VoiceActivity extends AppCompatActivity {
                 R.id.row01, StoreContacts
         );
         listView.setAdapter(arrayAdapter);
-    }
-
-    public void EnableRuntimePermission(){
-        if ( ActivityCompat.shouldShowRequestPermissionRationale( VoiceActivity.this, Manifest.permission.READ_CONTACTS) ) {
-            Snackbar.make(coordinatorLayout, "+ CONTACTS permission allows us to Access CONTACTS app.", Snackbar.LENGTH_LONG).show();
-        } else {
-            ActivityCompat.requestPermissions( VoiceActivity.this, new String[] {
-                    Manifest.permission.READ_CONTACTS}, RequestPermissionCode );
-        }
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -242,7 +288,6 @@ public class VoiceActivity extends AppCompatActivity {
                             twiMLParams.put("To", callPhoneNumber);
                             activeCall = Voice.call(VoiceActivity.this, TWILIO_ACCESS_TOKEN, twiMLParams, callListener);
                             setCallUI();
-
                         }
                     }
                 });
@@ -281,22 +326,19 @@ public class VoiceActivity extends AppCompatActivity {
     }
 
     // ---------------------------------------------------------------------------------------------
-    // Registration
 
-    private RegistrationListener registrationListener() {
-        return new RegistrationListener() {
-            @Override
-            public void onRegistered(String accessToken, String fcmToken) {
-                Log.d(TAG, "Successfully registered FCM " + fcmToken);
-            }
+    private class VoiceBroadcastReceiver extends BroadcastReceiver {
 
-            @Override
-            public void onError(RegistrationException error, String accessToken, String fcmToken) {
-                String message = String.format("Registration Error: %d, %s", error.getErrorCode(), error.getMessage());
-                Log.e(TAG, message);
-                Snackbar.make(coordinatorLayout, message, SNACKBAR_DURATION).show();
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(ACTION_INCOMING_CALL)) {
+                /*
+                 * Handle the incoming call invite
+                 */
+                handleIncomingCallIntent(intent);
             }
-        };
+        }
     }
 
     @Override
@@ -347,6 +389,25 @@ public class VoiceActivity extends AppCompatActivity {
             Log.i(TAG, "Registering with FCM");
             Voice.register(this, TWILIO_ACCESS_TOKEN, Voice.RegistrationChannel.FCM, fcmToken, registrationListener);
         }
+    }
+
+    // ------------
+    // Registration
+
+    private RegistrationListener registrationListener() {
+        return new RegistrationListener() {
+            @Override
+            public void onRegistered(String accessToken, String fcmToken) {
+                Log.d(TAG, "Successfully registered FCM " + fcmToken);
+            }
+
+            @Override
+            public void onError(RegistrationException error, String accessToken, String fcmToken) {
+                String message = String.format("Registration Error: %d, %s", error.getErrorCode(), error.getMessage());
+                Log.e(TAG, message);
+                Snackbar.make(coordinatorLayout, message, SNACKBAR_DURATION).show();
+            }
+        };
     }
 
     private View.OnClickListener callActionFabClickListener() {
@@ -467,21 +528,7 @@ public class VoiceActivity extends AppCompatActivity {
         }
     }
 
-    // ---------------------------------------------------------------------------------------------
-
-    private class VoiceBroadcastReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(ACTION_INCOMING_CALL)) {
-                /*
-                 * Handle the incoming call invite
-                 */
-                handleIncomingCallIntent(intent);
-            }
-        }
-    }
+    // --------------------
 
     private DialogInterface.OnClickListener answerCallClickListener() {
         return new DialogInterface.OnClickListener() {
@@ -568,49 +615,6 @@ public class VoiceActivity extends AppCompatActivity {
                 audioManager.abandonAudioFocus(null);
             }
         }
-    }
-
-    private boolean checkPermissionForMicrophone() {
-        int resultMic = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
-        return resultMic == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void requestPermissionForMicrophone() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
-            Snackbar.make(coordinatorLayout,
-                    "Microphone permissions needed. Please allow in your application settings.",
-                    SNACKBAR_DURATION).show();
-        } else {
-            ActivityCompat.requestPermissions(
-                    this,
-                    new String[]{Manifest.permission.RECORD_AUDIO},
-                    MIC_PERMISSION_REQUEST_CODE);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
-        // Check if microphone permissions are granted
-        if (requestCode == MIC_PERMISSION_REQUEST_CODE && permissions.length > 0) {
-            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                Snackbar.make(coordinatorLayout,
-                        "Microphone permissions needed. Please allow in your application settings.",
-                        SNACKBAR_DURATION).show();
-            } else {
-                registerForCallInvites();
-            }
-        }
-
-        // Check if contacts access permissions are granted
-        if (requestCode == RequestPermissionCode && permissions.length > 0) {
-            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                Snackbar.make(coordinatorLayout, "+ Permission Canceled, your application cannot access CONTACTS.", Snackbar.LENGTH_LONG).show();
-            } else {
-                // Snackbar.make(coordinatorLayout, "+ Permission Granted, Now your application can access CONTACTS.", Snackbar.LENGTH_LONG).show();
-            }
-        }
-
     }
 
 }
