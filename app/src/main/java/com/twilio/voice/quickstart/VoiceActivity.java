@@ -240,8 +240,13 @@ public class VoiceActivity extends AppCompatActivity {
         cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null, null, null);
         while (cursor.moveToNext()) {
             name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-            phonenumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            StoreContacts.add(name + " "  + ":" + " " + phonenumber);
+            phonenumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER));
+            String theType = cursor.getString(cursor.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_TYPE));
+            if (theType.equalsIgnoreCase("com.google")) {
+                // Don't add WhatsApp contacts ("com.whatsapp") because it duplicates the phone number.
+                // StoreContacts.add(name + " : " + phonenumber + " : " + theType);
+                StoreContacts.add(name + " : " + phonenumber);
+            }
         }
         cursor.close();
         Collections.sort(StoreContacts);
