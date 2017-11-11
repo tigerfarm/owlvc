@@ -158,12 +158,16 @@ public class VoiceActivity extends AppCompatActivity {
         EnableContactPermission();
         LoadContacts();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            // https://stackoverflow.com/questions/20032270/why-my-android-setonitemclicklistener-doesnt-work
+            // This may fix: https://stackoverflow.com/questions/14332409/custom-listview-is-not-responding-to-the-click-event/14333069#14333069
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int itemPosition     = position;
                 String  itemValue    = (String) listView.getItemAtPosition(position);
-                // listString.setText("+ Position: "+itemPosition+" : " +itemValue);
-                Snackbar.make(coordinatorLayout, "+ Position: "+itemPosition+" : " +itemValue, Snackbar.LENGTH_LONG).show();
+                // Snackbar.make(coordinatorLayout, "+ Position: "+itemPosition+" : " +itemValue, Snackbar.LENGTH_LONG).show();
+                // String toCall = itemValue.toString().trim();
+                // Snackbar.make(coordinatorLayout, "+ "+toCall+" "+toCall.indexOf("+")+1+" "+toCall.length(), Snackbar.LENGTH_LONG).show();
+                formPhoneNumber.setText( itemValue.substring(itemValue.lastIndexOf("+"), itemValue.trim().length()));
             }
         });
 
@@ -176,6 +180,32 @@ public class VoiceActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public void LoadContacts(){
+        StoreContacts.clear();
+        cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null, null, null);
+        while (cursor.moveToNext()) {
+            name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+            phonenumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER));
+            String theType = cursor.getString(cursor.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_TYPE));
+            if (theType.equalsIgnoreCase("com.google")) {
+                // Don't add WhatsApp contacts ("com.whatsapp") because it duplicates the phone number.
+                // StoreContacts.add(name + " : " + phonenumber + " : " + theType);
+                StoreContacts.add(name + " : " + phonenumber);
+            }
+        }
+        cursor.close();
+        Collections.sort(StoreContacts);
+        // Simple:
+        // arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, StoreContacts);
+        // With more options:
+        // arrayAdapter = new ArrayAdapter<String>( VoiceActivity.this, R.layout.list_item_contacts, R.id.row01, StoreContacts );
+        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, StoreContacts);
+
+        listView.setAdapter(arrayAdapter);
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -231,31 +261,6 @@ public class VoiceActivity extends AppCompatActivity {
             }
         }
 
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
-    public void LoadContacts(){
-        StoreContacts.clear();
-        cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null, null, null);
-        while (cursor.moveToNext()) {
-            name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-            phonenumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER));
-            String theType = cursor.getString(cursor.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_TYPE));
-            if (theType.equalsIgnoreCase("com.google")) {
-                // Don't add WhatsApp contacts ("com.whatsapp") because it duplicates the phone number.
-                // StoreContacts.add(name + " : " + phonenumber + " : " + theType);
-                StoreContacts.add(name + " : " + phonenumber);
-            }
-        }
-        cursor.close();
-        Collections.sort(StoreContacts);
-        arrayAdapter = new ArrayAdapter<String>(
-                VoiceActivity.this,
-                R.layout.list_item_contacts,
-                R.id.row01, StoreContacts
-        );
-        listView.setAdapter(arrayAdapter);
     }
 
     // ---------------------------------------------------------------------------------------------
