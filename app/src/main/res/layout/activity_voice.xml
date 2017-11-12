@@ -22,26 +22,43 @@
             android:layout_below="@+id/TwilioSid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="@dimen/formMarginSize"
+            android:layout_marginLeft="@dimen/activity_horizontal_marginBottom"
             android:textColor="#000000"
             android:textSize="14sp"/>
         <EditText
             android:id="@+id/formPhoneNumber"
-            android:layout_width="200dp"
+            android:layout_width="260dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
             android:text=""/>
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/call_action_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="@dimen/activity_horizontal_marginBottom"
             android:layout_marginBottom="@dimen/activity_horizontal_marginBottom"
+            android:layout_marginLeft="@dimen/activity_horizontal_marginBottom"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:src="@drawable/ic_call_white_24px"
             android:visibility="invisible" />
 
+        <!-- android:textStyle="italic" -->
+        <!-- android:textStyle="bold" -->
+        <TextView
+            android:id="@+id/labelContactName"
+            android:text="Contact Name to call."
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            android:layout_below="@+id/formPhoneNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:layout_marginBottom="@dimen/activity_horizontal_marginBottom"
+            android:layout_marginLeft="@dimen/formMarginLeft"
+            />
     </FrameLayout>
 
     <!-- ==================================================== -->
@@ -54,8 +71,8 @@
             android:id="@+id/chronometer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="73dp"
+            android:layout_marginLeft="300dp"
+            android:layout_marginTop="103dp"
             android:textColor="@color/colorAccent"
             android:textSize="20dp"
             android:visibility="invisible" />
@@ -65,7 +82,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="110dp"
+        android:layout_marginTop="130dp"
         android:orientation="vertical">
         <include layout="@layout/content_voice" />
     </LinearLayout>
@@ -75,8 +92,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_gravity="bottom|right"
+        android:layout_marginBottom="222dp"
         android:orientation="vertical">
-
         <!-- ==================================================== -->
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/speakerphone_action_fab"
@@ -96,7 +113,6 @@
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:visibility="invisible" />
-
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>
