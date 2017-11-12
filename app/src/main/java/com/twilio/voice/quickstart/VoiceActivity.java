@@ -35,6 +35,7 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.twilio.voice.Call;
@@ -94,6 +95,7 @@ public class VoiceActivity extends AppCompatActivity {
     Call.Listener callListener = callListener();
 
     private EditText formPhoneNumber;
+    private static TextView labelContactName;
 
     // For contacts
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -102,7 +104,7 @@ public class VoiceActivity extends AppCompatActivity {
     ArrayAdapter<String> arrayAdapter ;
     Cursor cursor ;
     String name, phonenumber ;
-    public  static final int RequestPermissionCode = 2;
+    public static final int RequestPermissionCode = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +118,7 @@ public class VoiceActivity extends AppCompatActivity {
         speakerActionFab = (FloatingActionButton) findViewById(R.id.speakerphone_action_fab);
         chronometer = (Chronometer) findViewById(R.id.chronometer);
 
+        labelContactName = (TextView)findViewById(R.id.labelContactName);
         formPhoneNumber = (EditText)findViewById(R.id.formPhoneNumber);
         // hide keyboard
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -168,6 +171,9 @@ public class VoiceActivity extends AppCompatActivity {
                 // String toCall = itemValue.toString().trim();
                 // Snackbar.make(coordinatorLayout, "+ "+toCall+" "+toCall.indexOf("+")+1+" "+toCall.length(), Snackbar.LENGTH_LONG).show();
                 formPhoneNumber.setText( itemValue.substring(itemValue.lastIndexOf("+"), itemValue.trim().length()));
+                if ( itemValue.lastIndexOf("+") > 6) {
+                    labelContactName.setText( itemValue.substring(0, itemValue.lastIndexOf("+")-3));
+                }
             }
         });
 
