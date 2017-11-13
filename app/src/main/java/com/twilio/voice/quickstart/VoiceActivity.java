@@ -94,11 +94,10 @@ public class VoiceActivity extends AppCompatActivity {
     RegistrationListener registrationListener = registrationListener();
     Call.Listener callListener = callListener();
 
+    private SwipeRefreshLayout swipeRefreshLayout;
     private EditText formPhoneNumber;
     private static TextView labelContactName;
-
     // For contacts
-    private SwipeRefreshLayout swipeRefreshLayout;
     ListView listView ;
     ArrayList<String> StoreContacts ;
     ArrayAdapter<String> arrayAdapter ;
@@ -197,7 +196,8 @@ public class VoiceActivity extends AppCompatActivity {
             name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             phonenumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER));
             String theType = cursor.getString(cursor.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_TYPE));
-            if (theType.equalsIgnoreCase("com.google")) {
+            if (theType == null || theType.equalsIgnoreCase("com.google")) {
+                // null is the value for the emulator.
                 // Don't add WhatsApp contacts ("com.whatsapp") because it duplicates the phone number.
                 // StoreContacts.add(name + " : " + phonenumber + " : " + theType);
                 StoreContacts.add(name + " : " + phonenumber);
@@ -214,9 +214,6 @@ public class VoiceActivity extends AppCompatActivity {
         listView.setAdapter(arrayAdapter);
     }
 
-    // ---------------------------------------------------------------------------------------------
-    // Access permissions
-
     public void EnableContactPermission(){
         if ( ActivityCompat.shouldShowRequestPermissionRationale( VoiceActivity.this, Manifest.permission.READ_CONTACTS) ) {
             Snackbar.make(coordinatorLayout, "+ CONTACTS permission allows us to Access CONTACTS app.", Snackbar.LENGTH_LONG).show();
@@ -225,6 +222,9 @@ public class VoiceActivity extends AppCompatActivity {
                     Manifest.permission.READ_CONTACTS}, RequestPermissionCode );
         }
     }
+
+    // ---------------------------------------------------------------------------------------------
+    // Access permissions
 
     private boolean checkPermissionForMicrophone() {
         int resultMic = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
