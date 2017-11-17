@@ -48,31 +48,9 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/labelToken"
-            android:text="@string/labelToken"
-            android:layout_below="@+id/TwilioSid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#000000"
-            android:textSize="14sp"/>
-
-        <LinearLayout
-            android:id="@+id/TwilioToken"
-            android:layout_below="@+id/labelToken"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/accountToken"
-                android:textSize="@dimen/buttonTextSize"
-                android:layout_width="@dimen/editAccountFieldWidth"
-                android:layout_height="wrap_content"
-                android:text=""/>
-        </LinearLayout>
-
-        <TextView
             android:id="@+id/labelGmtOffset"
             android:text="@string/labelGmtOffset"
-            android:layout_below="@+id/TwilioToken"
+            android:layout_below="@+id/TwilioSid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#000000"

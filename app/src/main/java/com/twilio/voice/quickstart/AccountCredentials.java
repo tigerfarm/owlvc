@@ -7,6 +7,10 @@ import android.preference.PreferenceManager;
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import okhttp3.Credentials;
 import okhttp3.Interceptor;
@@ -184,6 +188,42 @@ public class AccountCredentials implements Interceptor {
     }
     public String getAccNumberList() {
         return getDecrypted("account_phone_number_list");
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    String localDateTime(String theGmtDate) {
+        // :Tue, 26 Sep 2017 00:49:31 +0000:
+        //  012345678901234567890123456789
+        int numDateStart = 5;
+        int numDateEnd = 25;
+        if (theGmtDate.length() < numDateEnd) {
+            return "01 Jan 1980 00:00:00";      // return a default value
+        }
+        //                                                        "26 Sep 2017 00:49:31"
+        SimpleDateFormat readDateFormatter = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
+        Date gmtDate = new Date();
+        try {
+            gmtDate = readDateFormatter.parse(theGmtDate.substring(numDateStart, numDateEnd));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(gmtDate);
+        // -------------------------
+        String theOffset = getLocalTimeOffsetString();
+        // 123
+        // 5.5
+        int ie = theOffset.indexOf(".");
+        if (ie >= 0) {
+            theOffset = theOffset.substring(0, ie);
+            cal.add(Calendar.HOUR, Integer.parseInt(theOffset)); // from GMT to PST
+            cal.add(Calendar.MINUTE, 30 ); // India and Newfounland use half hour offset.
+        } else {
+            cal.add(Calendar.HOUR, Integer.parseInt(theOffset)); // from GMT to PST
+        }
+        // -------------------------
+        SimpleDateFormat writeDateformatter = new SimpleDateFormat("MMM dd, yyyy hh:mm a");
+        return writeDateformatter.format(cal.getTime());
     }
 
     // ---------------------------------------------------------------------------------------------
