@@ -17,8 +17,8 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/labelSid"
-            android:text="@string/labelSid"
+            android:id="@+id/labelTokenUrl"
+            android:text="@string/labelTokenUrl"
             android:paddingTop="9px"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,37 +32,22 @@
             android:background="@color/buttonBackgroundColor"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
-            android:layout_height="30dp" />
+            android:layout_height="60dp" />
 
         <LinearLayout
             android:id="@+id/TwilioSid"
-            android:layout_below="@+id/labelSid"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:layout_below="@+id/labelTokenUrl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <EditText
-                android:id="@+id/accountSid"
+                android:id="@+id/tokenUrl"
                 android:textSize="@dimen/buttonTextSize"
                 android:layout_width="@dimen/editAccountFieldWidth"
                 android:layout_height="wrap_content"
-                android:text=""/>
+                android:text="https://"/>
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/labelGmtOffset"
-            android:text="@string/labelGmtOffset"
-            android:layout_below="@+id/TwilioSid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#000000"
-            android:textSize="14sp"/>
-        <Spinner
-            android:id="@+id/spinnerGmtOffset"
-            android:title="Spinner"
-            android:paddingBottom="21px"
-            android:layout_below="@+id/labelGmtOffset"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
 
     </RelativeLayout>
 

@@ -114,6 +114,13 @@ public class VoiceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voice);
 
+        accountCredentials = new AccountCredentials(this);
+        String theTokenUrl = accountCredentials.getTokenUrl();
+        if (theTokenUrl.isEmpty()) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+        }
+
         // ---------------------------------------------------------------------------------------------
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
         callActionFab = (FloatingActionButton) findViewById(R.id.call_action_fab);
@@ -123,7 +130,6 @@ public class VoiceActivity extends AppCompatActivity {
 
         labelContactName = (TextView)findViewById(R.id.labelContactName);
         formPhoneNumber = (EditText)findViewById(R.id.formPhoneNumber);
-        accountCredentials = new AccountCredentials(this);
         labelContactName.setText(accountCredentials.getToContactName());
         formPhoneNumber.setText(accountCredentials.getToPhoneNumber());
 
@@ -328,9 +334,8 @@ public class VoiceActivity extends AppCompatActivity {
         Snackbar.make(coordinatorLayout, "+ Get Access Token...", SNACKBAR_DURATION).show();
         OkHttpClient client = new OkHttpClient.Builder()
                 .build();
-//                .url("https://fearful-crime-7560.twil.io/at")
         Request request = new Request.Builder()
-                .url("https://fearful-crime-7560.twil.io/at")
+                .url(accountCredentials.getTokenUrl())
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override

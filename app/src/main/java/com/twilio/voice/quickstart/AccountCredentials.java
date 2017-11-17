@@ -114,6 +114,15 @@ public class AccountCredentials implements Interceptor {
         this.authToken = aParam;
     }
 
+    public String getTokenUrl() {
+        this.authToken = getDecrypted("token_url");
+        return this.authToken;
+    }
+    public void setTokenUrl(String aParam) {
+        setEncrypted("token_url", aParam);
+        this.authToken = aParam;
+    }
+
     // ----------------------------------------------------
     // Needs to be set, in the Settings panel. Or calculate difference from GMT to local time.
     public void setLocalTimeOffset(String aParam) {

@@ -8,73 +8,8 @@
     <!-- ======================================================================================= -->
     <!-- Strings related to Settings -->
 
-    <string name="labelSid">Access Token URL</string>
-    <string name="labelGmtOffset">Timezone GMT offset</string>
+    <string name="labelTokenUrl">Access Token URL</string>
     <string name="buttomUpdate">Update</string>
-
-    <!-- Reference: https://greenwichmeantime.com/time-zone/asia/india/time/ -->
-    <string name="pref_title_gmt_offset">GMT hours offset for local time</string>
-    <string-array name="gmt_offset_labels">
-        <item>0: GMT, London, UK</item>
-        <item>-12</item>
-        <item>-11</item>
-        <item>-10</item>
-        <item>-9</item>
-        <item>-8: PT, California</item>
-        <item>-7</item>
-        <item>-6</item>
-        <item>-5: ET, Toronto and New York</item>
-        <item>-4: Nova Scotia</item>
-        <item>-3.5: Newfoundland</item>
-        <item>-3</item>
-        <item>-2</item>
-        <item>-1</item>
-        <item>0: GMT, London, UK</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>5.5: India</item>
-        <item>6</item>
-        <item>7: Thailand</item>
-        <item>8: Hong Kong, Singapore, China</item>
-        <item>9</item>
-        <item>10</item>
-        <item>11</item>
-        <item>12</item>
-    </string-array>
-    <!-- Note, Newfoundland is -3.5 because Newfoundland time is negative and the TwSms.localDateTime simply adds +0.05.-->
-    <string-array name="gmt_offset_values">
-        <item>0</item>
-        <item>-12</item>
-        <item>-11</item>
-        <item>-10</item>
-        <item>-9</item>
-        <item>-8</item>
-        <item>-7</item>
-        <item>-6</item>
-        <item>-5</item>
-        <item>-4</item>
-        <item>-4.5</item>
-        <item>-3</item>
-        <item>-2</item>
-        <item>-1</item>
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>5.5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-        <item>11</item>
-        <item>12</item>
-    </string-array>
 
     <!-- ======================================================================================= -->
     <!-- About Text Panel -->
