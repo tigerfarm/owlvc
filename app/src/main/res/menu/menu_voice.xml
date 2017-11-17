@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="tfpsms.tfp.com.twiliosms.com.tfp.tfpsms.MainActivity">
+
+    <!-- item
+        android:id="@+id/menu_refresh"
+        android:title="@string/title_activity_refresh"
+        app:showAsAction="never" / -->
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/title_activity_settings"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_about"
+        android:orderInCategory="100"
+        android:title="@string/title_activity_about"
+        app:showAsAction="never" />
+
+</menu>

@@ -26,12 +26,14 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -105,6 +107,8 @@ public class VoiceActivity extends AppCompatActivity {
     String name, phonenumber ;
     public static final int RequestPermissionCode = 2;
 
+    private AccountCredentials accountCredentials;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +123,10 @@ public class VoiceActivity extends AppCompatActivity {
 
         labelContactName = (TextView)findViewById(R.id.labelContactName);
         formPhoneNumber = (EditText)findViewById(R.id.formPhoneNumber);
+        accountCredentials = new AccountCredentials(this);
+        labelContactName.setText(accountCredentials.getToContactName());
+        formPhoneNumber.setText(accountCredentials.getToPhoneNumber());
+
         // hide keyboard
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(formPhoneNumber.getWindowToken(), 0);
@@ -170,7 +178,7 @@ public class VoiceActivity extends AppCompatActivity {
                 // String toCall = itemValue.toString().trim();
                 // Snackbar.make(coordinatorLayout, "+ "+toCall+" "+toCall.indexOf("+")+1+" "+toCall.length(), Snackbar.LENGTH_LONG).show();
                 formPhoneNumber.setText( itemValue.substring(itemValue.lastIndexOf("+"), itemValue.trim().length()));
-                if ( itemValue.lastIndexOf("+") > 6) {
+                if ( itemValue.lastIndexOf("+") > 3) {
                     labelContactName.setText( itemValue.substring(0, itemValue.lastIndexOf("+")-3));
                 }
             }
@@ -187,6 +195,52 @@ public class VoiceActivity extends AppCompatActivity {
 
     }
 
+    // ---------------------------------------------------------------------------------------------
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_voice, menu);
+
+        LoadContacts();
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        // if (id == R.id.menu_refresh) { return true; }
+
+        if (!checkBeforeLeaving("")) {
+            return true;
+        }
+        if (id == R.id.action_about) {
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    public boolean checkBeforeLeaving(String type) {
+
+        String callPhoneNumber = formPhoneNumber.getText().toString();
+        String callContactName = labelContactName.getText().toString();
+        if (!callPhoneNumber.isEmpty()) {
+            accountCredentials.setToPhoneNumber(callPhoneNumber);
+            accountCredentials.setToContactName(callContactName);
+        }
+
+        return true;
+    }
     // ---------------------------------------------------------------------------------------------
 
     public void LoadContacts(){
@@ -274,6 +328,7 @@ public class VoiceActivity extends AppCompatActivity {
         Snackbar.make(coordinatorLayout, "+ Get Access Token...", SNACKBAR_DURATION).show();
         OkHttpClient client = new OkHttpClient.Builder()
                 .build();
+//                .url("https://fearful-crime-7560.twil.io/at")
         Request request = new Request.Builder()
                 .url("https://fearful-crime-7560.twil.io/at")
                 .build();

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:text=""
+    android:id="@+id/gmt_offset_labels"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="start"
+    android:padding="5dip"
+    android:textColor="@color/listText"
+    android:textSize="14sp" />

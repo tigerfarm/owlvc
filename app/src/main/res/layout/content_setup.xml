@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/content_setup">
+
+               <!-- =================================== -->
+                <TextView
+                    android:id="@+id/about_twiliosetup"
+                    android:gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:textColor="@color/listText"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:text="@string/about_twiliosetup"/>
+                <TextView
+                    android:id="@+id/about_twilioaccount"
+                    android:gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/listText"
+                    android:textSize="14sp"
+                    android:text="@string/about_twilioaccount"/>
+                <TextView
+                    android:id="@+id/about_noresponse_title"
+                    android:gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:textColor="@color/listText"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:text="@string/about_noresponse_title"/>
+                <TextView
+                    android:id="@+id/about_noresponse"
+                    android:gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/listText"
+                    android:textSize="14sp"
+                    android:text="@string/about_noresponse"/>
+                <View
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorPrimary"/>
+
+</LinearLayout>

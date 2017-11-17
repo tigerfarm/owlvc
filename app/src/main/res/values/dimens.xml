@@ -6,4 +6,14 @@
     <dimen name="dividerHeight">3px</dimen>
     <dimen name="formMarginSize">6px</dimen>
     <dimen name="formMarginLeft">18px</dimen>
+
+    <dimen name="activity_horizontal_marginTop">10dp</dimen>
+
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="buttonTextSize">14dp</dimen>
+    <dimen name="editPhoneNumberFieldWidth">260dp</dimen>
+    <dimen name="editSendSmsFieldWidth">260dp</dimen>
+    <dimen name="listItemPaddingRight">9dp</dimen>
+    <dimen name="editAccountFieldWidth">280dp</dimen>
+
 </resources>

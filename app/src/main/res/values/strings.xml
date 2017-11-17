@@ -1,3 +1,147 @@
 <resources>
     <string name="app_name">Owl Call</string>
+
+    <!-- Menu titles -->
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_about">About</string>
+
+    <!-- ======================================================================================= -->
+    <!-- Strings related to Settings -->
+
+    <string name="labelSid">Account SID</string>
+    <string name="labelToken">Account Auth Token</string>
+    <string name="labelGmtOffset">Timezone GMT offset</string>
+    <string name="buttomUpdate">Update</string>
+
+    <string name="pref_header_twilio">Twilio Account</string>
+    <string name="pref_title_account_sid">Account SID</string>
+    <string name="pref_title_account_token">Account Auth Token</string>
+
+    <!-- Reference: https://greenwichmeantime.com/time-zone/asia/india/time/ -->
+    <string name="pref_title_gmt_offset">GMT hours offset for local time</string>
+    <string-array name="gmt_offset_labels">
+        <item>0: GMT, London, UK</item>
+        <item>-12</item>
+        <item>-11</item>
+        <item>-10</item>
+        <item>-9</item>
+        <item>-8: PT, California</item>
+        <item>-7</item>
+        <item>-6</item>
+        <item>-5: ET, Toronto and New York</item>
+        <item>-4: Nova Scotia</item>
+        <item>-3.5: Newfoundland</item>
+        <item>-3</item>
+        <item>-2</item>
+        <item>-1</item>
+        <item>0: GMT, London, UK</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>5.5: India</item>
+        <item>6</item>
+        <item>7: Thailand</item>
+        <item>8: Hong Kong, Singapore, China</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+    </string-array>
+    <!-- Note, Newfoundland is -3.5 because Newfoundland time is negative and the TwSms.localDateTime simply adds +0.05.-->
+    <string-array name="gmt_offset_values">
+        <item>0</item>
+        <item>-12</item>
+        <item>-11</item>
+        <item>-10</item>
+        <item>-9</item>
+        <item>-8</item>
+        <item>-7</item>
+        <item>-6</item>
+        <item>-5</item>
+        <item>-4</item>
+        <item>-4.5</item>
+        <item>-3</item>
+        <item>-2</item>
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>5.5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+    </string-array>
+
+    <!-- ======================================================================================= -->
+    <!-- About Text Panel -->
+    <string name="about_title">Owl SMS</string>
+    <string name="about_intro">
+        This application makes requests directly to the Twilio services to send, receive, and manage messages; and retrieve the list of SMS capable phone numbers.
+        \n
+    </string>
+
+    <string name="about_asis">
+        Owl SMS is offered \"as is\", without warranty or guarantee.
+    </string>
+    <string name="about_version">
+        \nVersion: 2.0
+        \nRelease date: November 15, 2017
+        \n
+        \nThis application is not a Twilio company application, even though it was developed by Twilio employees. There is a saying within the company, "Just draw the Owl." This is our drawing of an SMS application.
+    </string>
+    <!-- \n Draw the Owl: https://www.youtube.com/watch?v=dwSe2imUyvg -->
+
+    <!-- ======================================================================================= -->
+    <string name="about_twiliosetup">
+        Twilio Account Setup
+    </string>
+    <string name="about_twilioaccount">
+        To use Owl SMS, you are required to have a Twilio account with at least one SMS capable phone number.
+        \n
+        \nGo to http://Twilio.com/console to get and manage your account.
+        \n
+        \nThe account SID and auth token is located on the page when you first log in.
+        \n
+        \nYou can use a free Twilio Trial account with Owl SMS, however, take note of the restrictions. For example, you can only send and receive messages, to and from, phone numbers you have pre-verified. For more information, search for \"How does Twilio\'s Free Trial work?\"
+    </string>
+    <string name="about_noresponse_title">
+        Remove the Automatic SMS Reply Messages
+    </string>
+    <string name="about_noresponse">
+        \nBy default a Twilio phone number is configured with an automatic reply. You will want to stop the auto-reply.
+    \n
+        \n1. Go to TwiML Bins in the Twilio Console:
+    \nhttps://www.twilio.com/console/runtime/twiml-bins
+        \n
+    \n2. Create a "no reply" TwiML Bin entry that will be used in the phone number\'s configuration.
+    \nClick the create icon (white plus sign in red circle).
+    \nSet, Friendly Name: NoSmsResponse
+    \nSet, TwiML:
+        \n
+    \n&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;
+        \n&lt;Response&gt;&lt;/Response&gt;
+    \n
+        \n3. Click Create.
+        \n
+    \n4. Go to managing phone numbers in the Twilio Console:
+    \nhttps://www.twilio.com/console/phone-numbers/incoming
+        \n
+    \n5. Click your phone number.
+    \nUnder Messaging, Configure with,
+    \nSet, A message comes in: TwiML, NoSmsResponse
+        \n
+    \n6. Click Save.
+    \n
+        \nNow, when a message is sent to your Twilio phone number, there is no automatic reply.
+    </string>
+
 </resources>
