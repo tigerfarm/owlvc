@@ -83,18 +83,15 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 imm.hideSoftInputFromWindow(tokenUrl.getWindowToken(), 0);
                 try {
                     String theRequirementsMessage = "";
-                    String theValue = tokenUrl.getText().toString();
-                    if (!theValue.startsWith("https://")) {
-                        // Also need a validation check.
+                    String theTokenUrl = tokenUrl.getText().toString();
+                    if (!theTokenUrl.startsWith("https://")) {
                         theRequirementsMessage = theRequirementsMessage + "\n++ " + getString(R.string.labelTokenUrl) + " must start with: " + "https://";
                     }
                     if (!theRequirementsMessage.isEmpty()) {
-                        showResults.setText("+ Update: "  + theRequirementsMessage);
+                        showResults.setText("+ Update errors: "  + theRequirementsMessage);
                         return;
                     }
-                    accountCredentials.setTokenUrl( tokenUrl.getText().toString() );
-                    accountCredentials.setCredentials();
-                    Snackbar.make(swipeRefreshLayout, "+ Settings updated.", Snackbar.LENGTH_LONG).show();
+                    checkSetTokenUrl(theTokenUrl);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -103,5 +100,43 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
+    // ---------------------------------------------------------------------------------------------
+    private void checkSetTokenUrl(String theTokenUrl) {
+        // Snackbar.make(swipeRefreshLayout, "+ Get a sample access token...", Snackbar.LENGTH_LONG).show();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .build();
+        Request request = new Request.Builder()
+                .url(theTokenUrl)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(okhttp3.Call call, IOException e) {
+                String theMsg = "- Failed to connect to the access token host. Settings NOT updated.";
+                // showResults.setText(theMsg);
+                Snackbar.make(swipeRefreshLayout, theMsg, Snackbar.LENGTH_LONG).show();
+                call.cancel();
+            }
+            @Override
+            public void onResponse(okhttp3.Call call, Response response) throws IOException {
+                final String jsonResponse = response.body().string();
+                SettingsActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String theMsg;
+                        if ( jsonResponse.startsWith("{\"accesstoken\":") ) {
+                            // {"accesstoken":"eyJhb ... eLEQ8"}
+                            accountCredentials.setTokenUrl( tokenUrl.getText().toString() );
+                            accountCredentials.setCredentials();
+                            theMsg = "+ Got the access token. Settings updated.";
+                        } else {
+                            theMsg = "- Failed to get an access token. Settings NOT updated.";
+                        }
+                        showResults.setText(theMsg);
+                        // Snackbar.make(swipeRefreshLayout, theMsg, Snackbar.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
+    }
     // ---------------------------------------------------------------------------------------------
 }
