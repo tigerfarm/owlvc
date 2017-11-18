@@ -256,11 +256,35 @@ public class VoiceActivity extends AppCompatActivity {
             name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             phonenumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER));
             String theType = cursor.getString(cursor.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_TYPE));
+            String typeLabel;
+            int typeMobile = ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE;
+            int phoneType = cursor.getInt(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
+            switch (phoneType)
+            {
+                case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+                    typeLabel = "Home";
+                    break;
+                case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+                    typeLabel = "Mobile";
+                    break;
+                case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+                    typeLabel = "Work";
+                    break;
+                case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
+                    // For custom label, example: Work office or Work mobile
+                    typeLabel = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.LABEL));
+                    if (typeLabel.toLowerCase().contains("mobile")) {
+                        phoneType = typeMobile;
+                    }
+                    break;
+                default:
+                    typeLabel = "";
+            }
             if (theType == null || theType.equalsIgnoreCase("com.google")) {
                 // null is the value for the emulator.
                 // Don't add WhatsApp contacts ("com.whatsapp") because it duplicates the phone number.
                 // StoreContacts.add(name + " : " + phonenumber + " : " + theType);
-                StoreContacts.add(name + " : " + phonenumber);
+                StoreContacts.add(name + " : " + typeLabel + " " + phonenumber);
             }
         }
         cursor.close();
