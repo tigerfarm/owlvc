@@ -13,65 +13,38 @@
 
     <!-- ======================================================================================= -->
     <!-- About Text Panel -->
-    <string name="about_title">Owl SMS</string>
+    <string name="about_title">Owl Call</string>
     <string name="about_intro">
-        This application makes requests directly to the Twilio services to send, receive, and manage messages; and retrieve the list of SMS capable phone numbers.
+        This application makes phone call requests directly to Twilio\'s communication services, which in turn, gets you connected to the destination phone device.
+        \n
+        \nAt this time, contacts are managed using Google Contacts.
         \n
     </string>
 
     <string name="about_asis">
-        Owl SMS is offered \"as is\", without warranty or guarantee.
+        Owl Call is offered \"as is\", without warranty or guarantee.
     </string>
     <string name="about_version">
-        \nVersion: 2.0
-        \nRelease date: November 15, 2017
+        \nVersion: 1.0
+        \nRelease date: November 18, 2017
         \n
-        \nThis application is not a Twilio company application, even though it was developed by Twilio employees. There is a saying within the company, "Just draw the Owl." This is our drawing of an SMS application.
+        \nThis application is not a Twilio company application, even though it was developed by a Twilio employee, using the Twilio Voice SDK.
     </string>
-    <!-- \n Draw the Owl: https://www.youtube.com/watch?v=dwSe2imUyvg -->
 
     <!-- ======================================================================================= -->
     <string name="about_twiliosetup">
         Twilio Account Setup
     </string>
     <string name="about_twilioaccount">
-        To use Owl SMS, you are required to have a Twilio account with at least one SMS capable phone number.
+        To use Owl Call, you are required to have a Twilio account with at least one voice capable phone number.
         \n
         \nGo to http://Twilio.com/console to get and manage your account.
         \n
-        \nThe account SID and auth token is located on the page when you first log in.
+        \nNote, you either have to talk to an adminitrator, or set up your own access token application.
         \n
-        \nYou can use a free Twilio Trial account with Owl SMS, however, take note of the restrictions. For example, you can only send and receive messages, to and from, phone numbers you have pre-verified. For more information, search for \"How does Twilio\'s Free Trial work?\"
-    </string>
-    <string name="about_noresponse_title">
-        Remove the Automatic SMS Reply Messages
-    </string>
-    <string name="about_noresponse">
-        \nBy default a Twilio phone number is configured with an automatic reply. You will want to stop the auto-reply.
-    \n
-        \n1. Go to TwiML Bins in the Twilio Console:
-    \nhttps://www.twilio.com/console/runtime/twiml-bins
+        \nYou can use a free Twilio Trial account with Owl Call, however, take note of the restrictions. For example, you can only make calls to phone numbers you have pre-verified. For more information, search for \"How does Twilio\'s Free Trial work?\"
         \n
-    \n2. Create a "no reply" TwiML Bin entry that will be used in the phone number\'s configuration.
-    \nClick the create icon (white plus sign in red circle).
-    \nSet, Friendly Name: NoSmsResponse
-    \nSet, TwiML:
-        \n
-    \n&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;
-        \n&lt;Response&gt;&lt;/Response&gt;
-    \n
-        \n3. Click Create.
-        \n
-    \n4. Go to managing phone numbers in the Twilio Console:
-    \nhttps://www.twilio.com/console/phone-numbers/incoming
-        \n
-    \n5. Click your phone number.
-    \nUnder Messaging, Configure with,
-    \nSet, A message comes in: TwiML, NoSmsResponse
-        \n
-    \n6. Click Save.
-    \n
-        \nNow, when a message is sent to your Twilio phone number, there is no automatic reply.
+        \nTo manage your contacts, use Google Contacts on your smartphone, or from a laptop computer. In a future version, I plan to include the ability to mantain contact information: name, phone number and number type (mobile or landline, personal or work).
     </string>
 
 </resources>

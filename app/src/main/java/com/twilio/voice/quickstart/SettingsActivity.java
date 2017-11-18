@@ -112,7 +112,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onFailure(okhttp3.Call call, IOException e) {
                 String theMsg = "- Failed to connect to the access token host. Settings NOT updated.";
-                // showResults.setText(theMsg);
+                // Cause program to error out: showResults.setText(theMsg);
                 Snackbar.make(swipeRefreshLayout, theMsg, Snackbar.LENGTH_LONG).show();
                 call.cancel();
             }
