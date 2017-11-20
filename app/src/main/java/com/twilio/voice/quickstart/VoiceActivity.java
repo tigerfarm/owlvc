@@ -77,9 +77,7 @@ public class VoiceActivity extends AppCompatActivity {
     HashMap<String, String> twiMLParams = new HashMap<>();
 
     private CoordinatorLayout coordinatorLayout;
-    private FloatingActionButton callActionFab;
-    private FloatingActionButton hangupActionFab;
-    private FloatingActionButton speakerActionFab;
+    private FloatingActionButton callActionFab, callActionRefresh, hangupActionFab, speakerActionFab;
     private Chronometer chronometer;
     private SoundPoolManager soundPoolManager;
 
@@ -137,6 +135,9 @@ public class VoiceActivity extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(formPhoneNumber.getWindowToken(), 0);
 
+        callActionRefresh = (FloatingActionButton) findViewById(R.id.action_refresh);
+        callActionRefresh.setOnClickListener(callActionRefreshClickListener());
+
         callActionFab.setOnClickListener(callActionFabClickListener());
         hangupActionFab.setOnClickListener(hangupActionFabClickListener());
         speakerActionFab.setOnClickListener(speakerphoneActionFabClickListener());
@@ -184,8 +185,9 @@ public class VoiceActivity extends AppCompatActivity {
                 // String toCall = itemValue.toString().trim();
                 // Snackbar.make(coordinatorLayout, "+ "+toCall+" "+toCall.indexOf("+")+1+" "+toCall.length(), Snackbar.LENGTH_LONG).show();
                 formPhoneNumber.setText( itemValue.substring(itemValue.lastIndexOf("+"), itemValue.trim().length()));
-                if ( itemValue.lastIndexOf("+") > 3) {
-                    labelContactName.setText( itemValue.substring(0, itemValue.lastIndexOf("+")-3));
+                if ( itemValue.lastIndexOf(":") > 3) {
+                    // Example: "David : Mobile + 12223331234" -> "David"
+                    labelContactName.setText( itemValue.substring(0, itemValue.lastIndexOf(":")));
                 }
             }
         });
@@ -199,6 +201,17 @@ public class VoiceActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private View.OnClickListener callActionRefreshClickListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkBeforeLeaving("refresh");
+                Snackbar.make(coordinatorLayout, "+ Reload contacts", Snackbar.LENGTH_LONG).show();
+                LoadContacts();
+            }
+        };
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -247,6 +260,7 @@ public class VoiceActivity extends AppCompatActivity {
 
         return true;
     }
+
     // ---------------------------------------------------------------------------------------------
 
     public void LoadContacts(){
