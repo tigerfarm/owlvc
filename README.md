@@ -28,8 +28,8 @@ In the following, example data is used, not live data.
 
 1. [Create a Subaccount.](#bullet1)
 2. [Create API Key and secret key string.](#bullet2)
-3. [Configure a server to generate an access token to use in the app](#bullet3)
-4. [Create a TwiML Application using the above Twilio Function URL.](#bullet4)
+3. [Create a Twilio Function to say hello.](#bullet3)
+4. [Create a TwiML Application entry to call the above Twilio Function.](#bullet4)
 5. [Create Twilio Function to generate access tokens using the above values.](#bullet5)
 6. [Test using Owl Call.](#bullet6)
 
@@ -50,7 +50,9 @@ To keep this sample separate from your main account, create a subaccount.
 
 Note, the  account SID, API key and secret are the authentication keys. They must be from the same account or subaccount (not a combination of each).
 
-### <a name="bullet3"></a>Create a Twilio Function to say a message to the sample voice app when it makes its first test calls.
+### <a name="bullet3"></a>Create a Twilio Function to say hello.
+
+Create a Twilio Function to say a message to the sample voice app when it makes its first test calls.
 
 Go to the Functions page:
 
@@ -89,7 +91,7 @@ In your browser, go to:
     In the Twilio Console, a log entry is made: + Call from, identity: here.
     This is debugging tool when testing the sample voice app.
 
-### <a name="bullet4"></a>Create a TwiML Application using the above Twilio Function URL.
+### <a name="bullet4"></a>Create a TwiML Application entry to call the above Twilio Function.
 
 Go to the Create page:
 
