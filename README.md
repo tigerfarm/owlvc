@@ -22,7 +22,7 @@ Future features:
 
 ### Step-by-step guide to set up and generate voice access tokens
 
-Create the values and infrastructure components to generate access tokens used to make outgoing calls.
+Following are the steps to create the values and infrastructure components to generate access tokens which are used to make outgoing calls.
 
 In the following, example data is used, not live data.
 
@@ -31,10 +31,7 @@ In the following, example data is used, not live data.
 3. [Configure a server to generate an access token to use in the app](#bullet3)
 4. [Create a TwiML Application using the above Twilio Function URL.](#bullet4)
 5. [Create Twilio Function to generate access tokens using the above values.](#bullet5)
-6. [Run the app](#bullet6)
-7. [Generate google-services.json](#bullet7)
-8. [Add a Push Credential using your FCM Server API Key](#bullet8)
-9. [Receiving an Incoming Notification](#bullet9)
+6. [Test using Owl Call.](#bullet6)
 
 ### <a name="bullet1"></a>Create a Subaccount
 
@@ -45,7 +42,7 @@ To keep this sample separate from your main account, create a subaccount.
 
 ### <a name="bullet2"></a>Create API Key and secret key string.
 
-chttps://www.twilio.com/console/voice/runtime/api-keys
+    [https://www.twilio.com/console/voice/runtime/api-keys](https://www.twilio.com/console/voice/runtime/api-keys)
     https://www.twilio.com/console/voice/runtime/api-keys/create
     Friendly name: owlvcapp
     API key SID: SKe0b13kwe94wir04ofoq5d4bd9f8b2c
@@ -57,7 +54,7 @@ Note, the  account SID, API key and secret are the authentication keys. They mus
 
 Go to the Functions page:
 
-    https://www.twilio.com/console/runtime/functions
+    [https://www.twilio.com/console/runtime/functions](https://www.twilio.com/console/runtime/functions)
     
     Click the Create Function icon (red circle with white plus sign).
     In the New Function popup, click Blank, then click Create.
@@ -96,7 +93,7 @@ In your browser, go to:
 
 Go to the Create page:
 
-    https://www.twilio.com/console/voice/runtime/twiml-apps
+    [https://www.twilio.com/console/voice/runtime/twiml-apps](https://www.twilio.com/console/voice/runtime/twiml-apps)
 
     Enter the following:
     Friendly name: HelloWorldApp 
@@ -107,7 +104,7 @@ Go to the Create page:
 
 Go to the Functions page:
 
-    https://www.twilio.com/console/runtime/functions
+    [https://www.twilio.com/console/runtime/functions](https://www.twilio.com/console/runtime/functions)
     
     Click the Create Function icon (red circle with white plus sign).
     In the New Function popup, click Blank, then click Create.
@@ -118,28 +115,28 @@ Go to the Functions page:
     Code:
     
     exports.handler = function(context, event, callback) {
-    // Documentation: https://www.twilio.com/docs/api/rest/access-tokens
-    //
-    // Authorization parameters
-    const twilioAccountSid = 'ACrt0e356hksr34d16d8d4t8l390284a3';
-    const twilioApiKey = 'SKe0b13kwe94wir04ofoq5d4bd9f8b2c';
-    const twilioApiSecret = 'SuwkWen6Q5zNFvAkwlk49wMsXpDKOQ1bo';
-    // Outgoing application parameters
-    const identity = 'stacydavid'; // callerid (Twilio Function: event.From)
-    const outgoingApplicationSid = 'APeb4627655a2a4be5ae1ba962fc9576cf';
-    // Generate the access token with voice grants.
-    const AccessToken = require('twilio').jwt.AccessToken;
-    const VoiceGrant = AccessToken.VoiceGrant;
-    const voiceGrant = new VoiceGrant({
-    outgoingApplicationSid: outgoingApplicationSid
-    });
-    const token = new AccessToken(twilioAccountSid, twilioApiKey, twilioApiSecret);
-    token.addGrant(voiceGrant);
-    token.identity = identity;
-    // Output the token.
-    console.log(token.toJwt());
-    let response = { accesstoken: token.toJwt() };
-    callback(null, response);
+       // Documentation: https://www.twilio.com/docs/api/rest/access-tokens
+       //
+       // Authorization parameters
+       const twilioAccountSid = 'ACrt0e356hksr34d16d8d4t8l390284a3';
+       const twilioApiKey = 'SKe0b13kwe94wir04ofoq5d4bd9f8b2c';
+       const twilioApiSecret = 'SuwkWen6Q5zNFvAkwlk49wMsXpDKOQ1bo';
+       // Outgoing application parameters
+       const identity = 'stacydavid'; // callerid (Twilio Function: event.From)
+       const outgoingApplicationSid = 'APeb4627655a2a4be5ae1ba962fc9576cf';
+       // Generate the access token with voice grants.
+       const AccessToken = require('twilio').jwt.AccessToken;
+       const VoiceGrant = AccessToken.VoiceGrant;
+       const voiceGrant = new VoiceGrant({
+          outgoingApplicationSid: outgoingApplicationSid
+       });
+       const token = new AccessToken(twilioAccountSid, twilioApiKey, twilioApiSecret);
+       token.addGrant(voiceGrant);
+       token.identity = identity;
+       // Output the token.
+       console.log(token.toJwt());
+       let response = { accesstoken: token.toJwt() };
+       callback(null, response);
     };
 
 Note, for the identity constant, user your own identity name, no spaces (use: a..z).
@@ -152,4 +149,12 @@ Response:
 
     {"accesstoken":"eyJhbJciOiJIUzI1NiIsInR5cCI6IkpXVCIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTSzc0Y2JjOTAzN2QyMWM3YmMzNWU0NWE4OTFkNGZiZTEzLTE1MTAwNzgxNzUiLCJncmFudHMiOnsiaWRlbnRpdHkiOiJzdGFjeWRhdmlkIiwidm9pY2UiOnsib3V0Z29kackdOnsiYXBwbGljYXRpb25fc2lkIjoiQVBlYjQ2Mjc2NTVhMmE0YmU1YWUxYmE5NjJmYzk1NzZjZiJ9fX0sImlhdCI6MTUxMDA3ODE3NSwiZXhwIjoxNTEwMDgxNzc1LCJpc3MiOiJTSzc0Y2JjOTAzN2QyMWM3YmMzNWU0NWE4OTFkNGZiZTEzIiwic3ViIjoiQUNlMmFkODFkNmEwYzQxZmMwZTllZWViNWQxOWYxMGY2MyJ9.PYO9Kje1qDjitjdvJJon90IEilvN9njp2YGuJZr8nTI"}
 
-This is a sample token that is used by the sample Twilio Android Voice SDK sample app.
+The above is a sample token that is used by the sample Twilio Android Voice SDK sample app.
+
+### <a name="bullet5"></a>Test using Owl Call.
+
+Go to Owl Call Settings.
+
+    Enter your access token URL into Settings:
+
+   
