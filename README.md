@@ -60,7 +60,7 @@ Go to the Functions page:
     In the New Function popup, click Blank, then click Create.
     Enter the following:
     Properties, Function Name: Say Hello and add a log message
-    URL Path: https://about-time-6360.twil.io  /hello
+    URL Path: https://about-time-6360.twil.io  /sayhello
     Configuration, Access control: uncheck to allow web browser access.
     Code:
     exports.handler = function(context, event, callback) {
@@ -72,7 +72,7 @@ Go to the Functions page:
     
 Test by using your browser to go to:
 
-    https://about-time-6360.twil.io/hello
+    https://about-time-6360.twil.io/sayhello
     Replace "about-time-6360.twil.io" with your Twilio Function host name.
 
 The response:
@@ -85,7 +85,7 @@ In the Twilio Console, under the Hello Voice World code section, a log entry is 
 
 In your browser, go to:
 
-    https://about-time-6360.twil.io/hello?From=here.
+    https://about-time-6360.twil.io/sayhello?From=here.
     In the Twilio Console, a log entry is made: + Call from, identity: here.
     This is debugging tool when testing the sample voice app.
 
@@ -97,7 +97,7 @@ Go to the Create page:
 
     Enter the following:
     Friendly name: HelloWorldApp 
-    Voice, Request URL: https://about-time-6360.twil.io/hello
+    Voice, Request URL: https://about-time-6360.twil.io/sayhello
     After clicking Save, go back into the app entry to get the app SID. Example: APeb4627655a2a4be5ae1ba962fc9576cf
 
 ### <a name="bullet5"></a>Create Twilio Function to generate access tokens using the above values.
@@ -156,5 +156,8 @@ The above is a sample token that is used by the sample Twilio Android Voice SDK 
 Go to Owl Call Settings.
 
     Enter your access token URL into Settings:
+    https://about-time-6360.twil.io/at
+    Click Update.
+
 
    
