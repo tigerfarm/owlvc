@@ -1,4 +1,4 @@
-package com.twilio.voice.quickstart;
+package com.tigerfarmpress.voice.owlcall;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -28,6 +28,9 @@ public class AccountCredentials implements Interceptor {
     //
     private String accountSid = "";
     private String authToken;
+    private String accessToken;
+    private String accessTokenHost;
+    private String accessTokenAction;
     private String credentials;
     //
     private String twilioPhoneNumber;
@@ -106,21 +109,47 @@ public class AccountCredentials implements Interceptor {
     }
 
     public String getAccountToken() {
-        this.authToken = getDecrypted("auth_token");
-        return this.authToken;
+        this.accessToken = getDecrypted("auth_token");
+        return this.accessToken;
     }
     public void setAccountToken(String aParam) {
         setEncrypted("auth_token", aParam);
-        this.authToken = aParam;
+        this.accessToken = aParam;
+    }
+
+    public String getAccessTokenHost() {
+        this.accessTokenHost = getDecrypted("token_host");
+        if (accessTokenHost.isEmpty()) {
+            this.accessTokenHost = "obedient-machine-3163.twil.io";
+        }
+        return this.accessTokenHost;
+    }
+    public void setAccessTokenHost(String aParam) {
+        setEncrypted("token_host", aParam);
+        this.accessTokenHost = aParam;
+    }
+
+    public String getAccessTokenAction() {
+        this.accessTokenAction = getDecrypted("token_action");
+        return this.accessTokenAction;
+    }
+    public void setAccessTokenHostAction(String aParam) {
+        setEncrypted("token_action", aParam);
+        this.accessTokenAction = aParam;
     }
 
     public String getTokenUrl() {
-        this.authToken = getDecrypted("token_url");
-        return this.authToken;
+        this.accessToken = getDecrypted("token_url");
+        if (accessToken.equalsIgnoreCase("hello")) {
+            this.accessToken = "https://" + getAccessTokenHost() + "/hello";
+        } else if (accessToken.equalsIgnoreCase("call")) {
+            this.accessToken = "https://" + getAccessTokenHost() + "/call";
+        }
+        return this.accessToken;
     }
     public void setTokenUrl(String aParam) {
         setEncrypted("token_url", aParam);
-        this.authToken = aParam;
+        this.accessToken = aParam;
     }
 
     // ----------------------------------------------------

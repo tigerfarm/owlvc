@@ -1,23 +1,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="tfpsms.tfp.com.twiliosms.com.tfp.tfpsms.MainActivity">
+    tools:context="com.tigerfarmpress.voice.owlcall.VoiceActivity">
 
     <!-- item
-        android:id="@+id/menu_refresh"
-        android:title="@string/title_activity_refresh"
+        android:id="@+id/action_lookup"
+        android:title="@string/title_activity_lookup"
+        android:orderInCategory="100"
         app:showAsAction="never" / -->
 
     <item
         android:id="@+id/action_settings"
-        android:orderInCategory="100"
         android:title="@string/title_activity_settings"
+        android:orderInCategory="100"
         app:showAsAction="never" />
 
     <item
+        android:title="@string/title_activity_about"
         android:id="@+id/action_about"
         android:orderInCategory="100"
-        android:title="@string/title_activity_about"
         app:showAsAction="never" />
 
 </menu>

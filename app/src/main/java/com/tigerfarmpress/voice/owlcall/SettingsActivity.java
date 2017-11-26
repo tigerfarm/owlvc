@@ -1,4 +1,4 @@
-package com.twilio.voice.quickstart;
+package com.tigerfarmpress.voice.owlcall;
 
 
 import android.content.Context;
@@ -6,27 +6,18 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.twilio.voice.owlcall.R;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.TimeZone;
 
-import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -78,14 +69,15 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         switch (view.getId()) {
             case R.id.updateButton:
                 showResults.setText("");
+                Snackbar.make(swipeRefreshLayout, "+ Validate token value...", Snackbar.LENGTH_LONG).show();
                 // hide keyboard
                 InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(tokenUrl.getWindowToken(), 0);
                 try {
                     String theRequirementsMessage = "";
-                    String theTokenUrl = tokenUrl.getText().toString();
-                    if (!theTokenUrl.startsWith("https://")) {
-                        theRequirementsMessage = theRequirementsMessage + "\n++ " + getString(R.string.labelTokenUrl) + " must start with: " + "https://";
+                    String theTokenUrl = tokenUrl.getText().toString().trim();
+                    if (theTokenUrl.isEmpty()) {
+                        theRequirementsMessage = theRequirementsMessage + "\n++ " + getString(R.string.labelTokenUrl) + " required.";
                     }
                     if (!theRequirementsMessage.isEmpty()) {
                         showResults.setText("+ Update errors: "  + theRequirementsMessage);
@@ -101,12 +93,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
     // ---------------------------------------------------------------------------------------------
-    private void checkSetTokenUrl(String theTokenUrl) {
+    private void checkSetTokenUrl(final String theTokenUrl) {
         // Snackbar.make(swipeRefreshLayout, "+ Get a sample access token...", Snackbar.LENGTH_LONG).show();
         OkHttpClient client = new OkHttpClient.Builder()
                 .build();
+        accountCredentials.setTokenUrl( theTokenUrl );
         Request request = new Request.Builder()
-                .url(theTokenUrl)
+                .url(accountCredentials.getTokenUrl())
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -125,7 +118,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                         String theMsg;
                         if ( jsonResponse.startsWith("{\"accesstoken\":") ) {
                             // {"accesstoken":"eyJhb ... eLEQ8"}
-                            accountCredentials.setTokenUrl( tokenUrl.getText().toString() );
                             accountCredentials.setCredentials();
                             theMsg = "+ Got the access token. Settings updated.";
                         } else {

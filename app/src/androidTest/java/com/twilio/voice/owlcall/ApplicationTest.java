@@ -1,4 +1,4 @@
-package com.twilio.voice.quickstart;
+package com.twilio.voice.owlcall;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

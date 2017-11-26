@@ -1,4 +1,4 @@
-package com.twilio.voice.quickstart;
+package com.tigerfarmpress.voice.owlcall;
 
 import android.Manifest;
 import android.app.NotificationManager;
@@ -26,7 +26,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,6 +45,7 @@ import com.twilio.voice.CallInvite;
 import com.twilio.voice.RegistrationException;
 import com.twilio.voice.RegistrationListener;
 import com.twilio.voice.Voice;
+import com.twilio.voice.owlcall.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -61,19 +61,15 @@ public class VoiceActivity extends AppCompatActivity {
 
     private static final String TAG = "VoiceActivity";
 
-    //You must provide a Twilio Access Token to connect to the Voice service
-    private static String TWILIO_ACCESS_TOKEN = "";
-
-    private static final int MIC_PERMISSION_REQUEST_CODE = 1;
     private static final int SNACKBAR_DURATION = 4000;
 
+    private static final int MIC_PERMISSION_REQUEST_CODE = 1;
     private AudioManager audioManager;
     private int savedAudioMode = AudioManager.MODE_INVALID;
-
     private boolean isReceiverRegistered = false;
     private VoiceBroadcastReceiver voiceBroadcastReceiver;
 
-    // Empty HashMap, never populated for the Quickstart
+    private static String TWILIO_ACCESS_TOKEN = "";
     HashMap<String, String> twiMLParams = new HashMap<>();
 
     private CoordinatorLayout coordinatorLayout;
@@ -115,8 +111,10 @@ public class VoiceActivity extends AppCompatActivity {
         accountCredentials = new AccountCredentials(this);
         String theTokenUrl = accountCredentials.getTokenUrl();
         if (theTokenUrl.isEmpty()) {
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
+            accountCredentials.setTokenUrl( "hello" );
+            Snackbar.make(coordinatorLayout, "+ Token URL set to :" + accountCredentials.getTokenUrl() + ":", SNACKBAR_DURATION).show();
+            // Intent intent = new Intent(this, SettingsActivity.class);
+            // startActivity(intent);
         }
 
         // ---------------------------------------------------------------------------------------------
@@ -202,7 +200,17 @@ public class VoiceActivity extends AppCompatActivity {
         });
 
     }
+/*
+        String number = "494498498";
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" +number));
+        startActivity(intent);
 
+    public Fragment getItem(int position) {
+        // Java Code Examples for com.android.contacts.dialpad.DialpadFragment
+        // return new DialpadFragment();
+    }
+*/
     private View.OnClickListener callActionRefreshClickListener() {
         return new View.OnClickListener() {
             @Override
@@ -235,6 +243,13 @@ public class VoiceActivity extends AppCompatActivity {
         if (!checkBeforeLeaving("")) {
             return true;
         }
+
+        /*
+        if (id == R.id.action_lookup) {
+            doLookup();
+            return true;
+        } else
+        */
         if (id == R.id.action_about) {
             Intent intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
@@ -369,7 +384,7 @@ public class VoiceActivity extends AppCompatActivity {
 
     // ---------------------------------------------------------------------------------------------
     private void getAccessToken() {
-        Snackbar.make(coordinatorLayout, "+ Get Access Token...", SNACKBAR_DURATION).show();
+        // Snackbar.make(coordinatorLayout, "+ Get Access Token...", SNACKBAR_DURATION).show();
         OkHttpClient client = new OkHttpClient.Builder()
                 .build();
         Request request = new Request.Builder()
@@ -390,7 +405,7 @@ public class VoiceActivity extends AppCompatActivity {
                         if ( jsonResponse.contains("\"code\": 20003") || jsonResponse.contains("\"status\": 404") ) {
                             Snackbar.make(coordinatorLayout, "+ Logging into your Twilio account failed. Go to Settings.", Snackbar.LENGTH_LONG).show();
                         } else {
-                            Snackbar.make(coordinatorLayout, "+ Got the Access Token.", Snackbar.LENGTH_LONG).show();
+                            // Snackbar.make(coordinatorLayout, "+ Got the Access Token.", Snackbar.LENGTH_LONG).show();
                             //
                             // {"accesstoken":"eyJhb ... eLEQ8"}
                             // 01234567890123456789
@@ -530,12 +545,18 @@ public class VoiceActivity extends AppCompatActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // hide keyboard
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(formPhoneNumber.getWindowToken(), 0);
+
                 if (!formPhoneNumber.getText().toString().isEmpty()) {
-                    // hide keyboard
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(formPhoneNumber.getWindowToken(), 0);
-                    //
+                    Snackbar.make(coordinatorLayout, "+ Making a call...", SNACKBAR_DURATION).show();
                     getAccessToken();
+                } else if (accountCredentials.getTokenUrl().endsWith("hello")) {
+                        Snackbar.make(coordinatorLayout, "+ Making a test call...", SNACKBAR_DURATION).show();
+                        getAccessToken();
+                } else {
+                    Snackbar.make(coordinatorLayout, "+ Enter or select a phone number to call.", SNACKBAR_DURATION).show();
                 }
             }
         };
@@ -733,4 +754,5 @@ public class VoiceActivity extends AppCompatActivity {
         }
     }
 
+    // ---------------------------------------------------------------------------------------------
 }

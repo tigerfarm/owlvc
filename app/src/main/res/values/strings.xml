@@ -2,6 +2,7 @@
     <string name="app_name">Owl Call</string>
 
     <!-- Menu titles -->
+    <string name="title_activity_lookup">Phone number information</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_about">About</string>
 
@@ -12,39 +13,77 @@
     <string name="buttomUpdate">Update</string>
 
     <!-- ======================================================================================= -->
-    <!-- About Text Panel -->
+    <!-- About Panel -->
+
     <string name="about_title">Owl Call</string>
     <string name="about_intro">
-        This application makes phone call requests directly to Twilio\'s communication services, which in turn, gets you connected to the destination phone device.
-        \n
-        \nAt this time, contacts are managed using Google Contacts.
+        This application makes phone call requests directly to Twilio\'s communication services, which in turn, will connect you to the destination phone device. At this time, contacts are managed using Google Contacts.
         \n
     </string>
-
     <string name="about_asis">
         Owl Call is offered \"as is\", without warranty or guarantee.
     </string>
     <string name="about_version">
         \nVersion: 1.0
-        \nRelease date: November 18, 2017
+        \nRelease date: November 26, 2017
         \n
         \nThis application is not a Twilio company application, even though it was developed by a Twilio employee, using the Twilio Voice SDK.
     </string>
+    <!-- ===================================== -->
+    <string name="about_published_by">
+        Author of Owl Call: Stacy David
+        \nPublished by Tiger Farm Press.
+        \nNovember 26, 2017, California, USA
+        \n
+        \nServer side program set up instructions and Owl Call source:
+        \nhttps://github.com/tigerfarm/owlvc
+        \n
+    </string>
+    <!-- ===================================== -->
+    <string name="about_privacy_policy_title">
+        Privacy Notice
+    </string>
+    <!-- Based on a sample from: https://www.bbb.org/greater-san-francisco/for-businesses/toolkits1/sample-privacy-policy/ -->
+    <string name="about_privacy_policy">
+        This privacy notice discloses the privacy practices used in the Owl Call application. This privacy notice applies solely to information used by the Owl Call application.
+        \n
+        \n--- Information Collection, Use, and Sharing ---
+        \n
+        \nYour Google Contact information (Name, phone number, and phone number type) is read into the application\'s electronic working memory. Only one Google Contacts phone number, and the related name, is stored on the device at any time. The stored data is encrypted.
+        \n
+        \nYour Google Contacts and Twilio account information is not shared by Owl SMS. Your Google Contact and Twilio account information, are only used in this application, and between the application and the Twilio online services.
+        \n
+        \nThe Settings Access Token URL connects you Twilio services. The account is either your account, or an account setup by some else, such as Stacy David, the author of this application.
+        \n
+        \n--- Security ---
+        \n
+        \nThe phone numbers you use in Owl Call are either your Google Contact phone numbers or numbers you enter manually. The phone numbers are transmitted between Owl Call and the Twilio services using the encyrpted protocol, HTTPS.
+        \n
+        \nEncryption is used to protect information transmitted online between the applcation and the Twilio services (HTTPS). Information stored on the device is also encrypted.
+        \n
+    </string>
 
     <!-- ======================================================================================= -->
+    <!-- Settings Panel -->
+
     <string name="about_twiliosetup">
         Twilio Account Setup
     </string>
     <string name="about_twilioaccount">
-        To use Owl Call, you are required to have a Twilio account with at least one voice capable phone number.
+        To use Owl Call, you require access to a pre-configured Twilio account, or your own Twilio account with a voice capable phone number.
         \n
-        \nGo to http://Twilio.com/console to get and manage your account.
+        \nTwilio Account Console: http://Twilio.com/console.
         \n
-        \nNote, you either have to talk to an adminitrator, or set up your own access token application.
+        \nFor this beta release, you may contact Stacy David, a Twilio Onboarding techincal support engineer, to use his pre-configured account.
+        \n
+        \nTo use your own Twilio account, you need to have a server side program to generate an access token. The access token contains a link to another server side program that allows Owl Call to make phone calls. The access token program\'s URL is enter above. Then click Update.
+        \n
+        \nServer side program set up instructions:
+        \nhttps://github.com/tigerfarm/owlvc
         \n
         \nYou can use a free Twilio Trial account with Owl Call, however, take note of the restrictions. For example, you can only make calls to phone numbers you have pre-verified. For more information, search for \"How does Twilio\'s Free Trial work?\"
         \n
-        \nTo manage your contacts, use Google Contacts on your smartphone, or from a laptop computer. In a future version, I plan to include the ability to mantain contact information: name, phone number and number type (mobile or landline, personal or work).
+        \nTo manage your contacts, for now, use Google Contacts on your smartphone, or from a laptop/desktop computer.
     </string>
 
 </resources>

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/activity_about"
-    tools:context="com.twilio.voice.quickstart.AboutActivity">
+    tools:context="com.tigerfarmpress.voice.owlcall.AboutActivity">
 
     <!-- =================================== -->
     <android.support.design.widget.AppBarLayout
@@ -27,9 +27,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1">
+
         <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -37,8 +39,8 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:orientation="vertical"
-                android:paddingRight="8dp"
                 android:paddingBottom="8dp"
+                android:paddingRight="8dp"
                 android:paddingTop="8dp">
 
                 <!-- =================================== -->
@@ -46,23 +48,25 @@
                     android:id="@+id/about_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@string/about_title"
                     android:textColor="@color/listText"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:text="@string/about_title"/>
+                    android:textStyle="bold" />
+
                 <View
-                    android:layout_marginTop="6dp"
-                    android:layout_marginBottom="6dp"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/colorPrimary"/>
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@color/colorPrimary" />
+
                 <TextView
                     android:id="@+id/about_intro"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@string/about_intro"
                     android:textColor="@color/listText"
-                    android:textSize="14sp"
-                    android:text="@string/about_intro"/>
+                    android:textSize="14sp" />
 
                 <!-- =================================== -->
                 <TextView
@@ -70,22 +74,62 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/borders_box"
+                    android:text="@string/about_asis"
                     android:textColor="@color/listText"
-                    android:textSize="14sp"
-                    android:text="@string/about_asis"/>
+                    android:textSize="14sp" />
+
                 <TextView
                     android:id="@+id/about_version"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@string/about_version"
                     android:textColor="@color/listText"
-                    android:textSize="14sp"
-                    android:text="@string/about_version"/>
+                    android:textSize="14sp" />
+
                 <View
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/colorPrimary"/>
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@color/colorPrimary" />
+
+                <!-- =================================== -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/about_published_by"
+                    android:textColor="@color/listText"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@color/colorPrimary" />
+
+                <!-- =================================== -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:text="@string/about_privacy_policy_title"
+                    android:textColor="@color/listText"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/about_privacy_policy"
+                    android:textColor="@color/listText"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@color/colorPrimary" />
 
             </LinearLayout>
         </ScrollView>

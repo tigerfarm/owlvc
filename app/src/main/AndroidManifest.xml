@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.twilio.voice.quickstart">
+    package="com.twilio.voice.owlcall">
 
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
@@ -10,33 +10,33 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".VoiceActivity">
+        <activity android:name="com.tigerfarmpress.voice.owlcall.VoiceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.twilio.voice.quickstart.SettingsActivity"
+            android:name="com.tigerfarmpress.voice.owlcall.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="com.twilio.voice.quickstart.VoiceActivity">
+            android:parentActivityName="com.tigerfarmpress.voice.owlcall.VoiceActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.twilio.voice.quickstart.VoiceActivity" />
+                android:value="com.tigerfarmpress.voice.owlcall.VoiceActivity" />
         </activity>
         <activity
-            android:name="com.twilio.voice.quickstart.AboutActivity"
+            android:name="com.tigerfarmpress.voice.owlcall.AboutActivity"
             android:label="@string/title_activity_about"
-            android:parentActivityName="com.twilio.voice.quickstart.VoiceActivity"
+            android:parentActivityName="com.tigerfarmpress.voice.owlcall.VoiceActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.twilio.voice.quickstart.VoiceActivity" />
+                android:value="com.tigerfarmpress.voice.owlcall.VoiceActivity" />
         </activity>
 
         <!-- [START fcm_listener] -->
         <service
-            android:name=".fcm.VoiceFirebaseMessagingService">
+            android:name="com.tigerfarmpress.voice.owlcall.fcm.VoiceFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -44,7 +44,7 @@
         <!-- [END fcm_listener] -->
         <!-- [START instanceId_listener] -->
             <service
-                android:name=".fcm.VoiceFirebaseInstanceIDService" >
+                android:name="com.tigerfarmpress.voice.owlcall.fcm.VoiceFirebaseInstanceIDService" >
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>

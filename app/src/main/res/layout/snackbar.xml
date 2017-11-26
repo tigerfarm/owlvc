@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.twilio.voice.quickstart.SettingsActivity"
+    tools:context="com.tigerfarmpress.voice.owlcall.SettingsActivity"
     tools:showIn="@layout/activity_voice">
 
 </android.support.v4.widget.SwipeRefreshLayout>

@@ -1,4 +1,4 @@
-package com.twilio.voice.quickstart.fcm;
+package com.tigerfarmpress.voice.owlcall.fcm;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
@@ -21,9 +21,9 @@ import com.twilio.voice.CallInvite;
 import com.twilio.voice.MessageException;
 import com.twilio.voice.MessageListener;
 import com.twilio.voice.Voice;
-import com.twilio.voice.quickstart.R;
-import com.twilio.voice.quickstart.SoundPoolManager;
-import com.twilio.voice.quickstart.VoiceActivity;
+import com.twilio.voice.owlcall.R;
+import com.tigerfarmpress.voice.owlcall.SoundPoolManager;
+import com.tigerfarmpress.voice.owlcall.VoiceActivity;
 
 import java.util.Map;
 

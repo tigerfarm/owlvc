@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:focusableInTouchMode="true"
-    tools:context="com.twilio.voice.quickstart.VoiceActivity">
+    tools:context="com.tigerfarmpress.voice.owlcall.VoiceActivity">
 
     <FrameLayout
         android:id="@+id/numberform"
@@ -66,7 +66,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         >
-
         <Chronometer
             android:id="@+id/chronometer"
             android:layout_width="wrap_content"
@@ -92,7 +91,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="150dp"
         android:layout_gravity="top|right"
         android:orientation="vertical">
         <!-- ==================================================== -->
@@ -110,7 +109,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical">
-            <!-- ==================================================== -->
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/speakerphone_action_fab"
                 android:layout_width="wrap_content"

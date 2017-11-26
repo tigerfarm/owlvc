@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/activity_settings"
-    tools:context="com.twilio.voice.quickstart.SettingsActivity">
+    tools:context="com.tigerfarmpress.voice.owlcall.SettingsActivity">
 
     <!-- =================================== -->
     <RelativeLayout
@@ -40,47 +40,98 @@
             android:layout_marginBottom="6dp"
             android:layout_below="@+id/labelTokenUrl"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:weightSum="1">
             <EditText
                 android:id="@+id/tokenUrl"
                 android:textSize="@dimen/buttonTextSize"
                 android:layout_width="@dimen/editAccountFieldWidth"
                 android:layout_height="wrap_content"
-                android:text="https://"/>
+                android:text="hello"/>
         </LinearLayout>
 
     </RelativeLayout>
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <!-- =================================== -->
+    <RelativeLayout
+        android:id="@+id/showResultsBox"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="1dp"
+            android:layout_width="match_parent"
+            android:layout_height="42dp">
+            <TextView
+                android:id="@+id/showResults"
+                android:layout_below="@+id/tokenUrl"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                android:text=""/>
+            <View
+                android:layout_marginTop="2dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorPrimary"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_below="@+id/showResultsBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_weight="1"
-            android:gravity="center_vertical"
             android:orientation="vertical"
             android:paddingRight="8dp"
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp">
+            android:paddingBottom="8dp">
 
+            <!-- =================================== -->
             <TextView
-                android:id="@+id/showResults"
+                android:id="@+id/about_twiliosetup"
+                android:gravity="center_vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="42dp"
-                android:padding="9px"
-                android:textColor="#000000"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:textColor="@color/listText"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:text="@string/about_twiliosetup"/>
+            <TextView
+                android:id="@+id/about_twilioaccount"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/listText"
                 android:textSize="14sp"
-                android:text=""/>
-
+                android:text="@string/about_twilioaccount"/>
             <View
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginBottom="12dp"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/colorPrimary"/>
-            <include layout="@layout/content_setup" />
+
+            <!-- =================================== -->
+            <!-- TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/listText"
+                android:textSize="14sp"
+                android:text="@string/about_published_by"/>
+            <View
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorPrimary"/ -->
 
             <include layout="@layout/snackbar" />
 

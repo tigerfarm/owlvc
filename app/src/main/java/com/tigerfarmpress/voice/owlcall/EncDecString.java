@@ -1,4 +1,4 @@
-package com.twilio.voice.quickstart;
+package com.tigerfarmpress.voice.owlcall;
 
 import android.util.Base64;
 
@@ -45,12 +45,18 @@ public class EncDecString {
     }
 
     public String encryptBase64String(String msgString) throws InvalidKeyException, InvalidAlgorithmParameterException {
+        if (msgString.isEmpty()) {
+            return "";
+        }
         byte[] keyBytes = encryptionKeyString.getBytes();
         byte[] msgBytes = msgString.getBytes();
         byte[] msgEncryptedBytes = encrypt(keyBytes, ivBytes, msgBytes);
         return Base64.encodeToString(msgEncryptedBytes, Base64.DEFAULT);
     }
     public String decryptBase64String(String msgBase64encodedEncryptedString) throws InvalidKeyException, InvalidAlgorithmParameterException {
+        if (msgBase64encodedEncryptedString.isEmpty()) {
+            return "";
+        }
         byte[] keyBytes = encryptionKeyString.getBytes();
         byte[] msgDecryptedBase64bytes = decrypt(keyBytes, ivBytes, Base64.decode(msgBase64encodedEncryptedString, Base64.DEFAULT));
         return new String(msgDecryptedBase64bytes);

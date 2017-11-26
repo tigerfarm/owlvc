@@ -1,4 +1,4 @@
-package com.twilio.voice.quickstart.fcm;
+package com.tigerfarmpress.voice.owlcall.fcm;
 
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
-import com.twilio.voice.quickstart.VoiceActivity;
+import com.tigerfarmpress.voice.owlcall.VoiceActivity;
 
 public class VoiceFirebaseInstanceIDService extends FirebaseInstanceIdService {
 

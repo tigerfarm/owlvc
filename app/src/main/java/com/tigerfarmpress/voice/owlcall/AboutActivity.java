@@ -1,4 +1,4 @@
-package com.twilio.voice.quickstart;
+package com.tigerfarmpress.voice.owlcall;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+
+import com.twilio.voice.owlcall.R;
 
 public class AboutActivity extends AppCompatActivity {
 
