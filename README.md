@@ -18,7 +18,8 @@ In the following, example data is used, not live data.
 
 1. [Create a Subaccount.](#bullet1)
 2. [Create a Twilio Function to generate access tokens.](#bullet2)
-This function uses the subaccount SID and will use the values from the next 3 steps.
+
+This function uses the subaccount SID from the previous step, and will use the values from the next 3 steps.
 
 3. [Create an API Key and secret key string.](#bullet3)
 4. [Create a test Twilio Function to generate TwiML to say hello.](#bullet4)
