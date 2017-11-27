@@ -1,24 +1,14 @@
 # Owl Call
 
-This document contains the set up steps to make voice calls using the Owl Call Android app.
+This document contains the steps to configure your Twilio Account so that you can make voice calls using the Owl Call app.
 
-This project is based on the getting started with Voice on Android project.
-
-Owl Call's enhancements to the original:
+This project is based on the Twilio SDK Voice sample. Owl Call's enhancements to the original project:
 
     + An Edit text field to enter the call-to phone number (PSTN), Twilio Client id, or Twilio SIP address.
     + The call-to value is passed to the Twilio Function that connects the app to the other caller.
-    + Contact list is displayed in a refreshable ListView.
+    + Google Contacts are listed and can be used to make phone calls.
     + A new access token is retreived before making a call.
     + Access codes are generated from a Twilio Function.
-
-Future features:
-
-    + Add Twilio account information to Setting, same as Owl SMS. This will allow:
-    ++ Adding call logs.
-    ++ Adding Twilio Lookup to get phone number information.
-    + Handle incoming calls.
-    + Notification of an incoming call.
 
 ### Step-by-step guide to set up and generate voice access tokens
 
@@ -27,11 +17,11 @@ Following are the steps to create the values and infrastructure components to ge
 In the following, example data is used, not live data.
 
 1. [Create a Subaccount.](#bullet1)
-2. [Create Twilio Function to generate access tokens.](#bullet2)
+2. [Create a Twilio Function to generate access tokens.](#bullet2)
 This function uses the subaccount SID and will use the values from the next 3 steps.
 
-3. [Create API Key and secret key string.](#bullet3)
-4. [Create a Twilio Function to say hello.](#bullet4)
+3. [Create an API Key and secret key string.](#bullet3)
+4. [Create a test Twilio Function to generate TwiML to say hello.](#bullet4)
 5. [Create a TwiML Application entry to call the above Twilio Function.](#bullet5)
 
 6. [Test using Owl Call.](#bullet6)
@@ -178,4 +168,10 @@ Go to Owl Call Settings.
 
 Owl Call is configured to make test calls. The next step is use a TwiML application that will place phone calls.
 
-   
+Future features:
+
+    + Handle incoming calls.
+    + Notification of an incoming call.
+    + Add Twilio account information to the Setting panel, same as Owl SMS. This will allow:
+    ++ Listing call logs.
+    ++ Using Twilio Lookup to get phone number information.
