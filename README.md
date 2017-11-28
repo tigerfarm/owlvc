@@ -25,6 +25,8 @@ This function uses the subaccount SID from the previous step, and will use the v
 4. [Create a test Twilio Function to generate TwiML to say hello.](#bullet4)
 5. [Create a TwiML Application entry to call the above Twilio Function.](#bullet5)
 
+Valid access tokens can now be generated for use to make phone calls.
+
 6. [Test using Owl Call.](#bullet6)
 
 ### <a name="bullet1"></a>Create a Subaccount
@@ -168,6 +170,8 @@ Go to Owl Call Settings.
     You will here your Hello message from the Twilio service.
 
 Owl Call is configured to make test calls. The next step is use a TwiML application that will place phone calls.
+
+--------------------------------------------------
 
 Future features:
 
