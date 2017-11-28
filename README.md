@@ -59,7 +59,7 @@ Go to the Functions page:
        const twilioApiSecret = 'SuwkWen6Q5zNFvAkwlk49wMsXpDKOQ1bo';
        // Outgoing application parameters
        const outgoingApplicationSid = 'APeb4627655a2a4be5ae1ba962fc9576cf';
-       const identity = 'stacydavid'; // callerid (Twilio Function: event.From)
+       const identity = 'stacydavid'; // When making phone calls, this is your client id, your callerid.
        
        // Generate the access token with voice grants.
        const AccessToken = require('twilio').jwt.AccessToken;
@@ -76,9 +76,9 @@ Go to the Functions page:
        callback(null, response);
     };
 
-Replace,
-+ The twilioAccountSid value with your subaccount SID (or if not using a subaccount, your account SID).
-+ The identity value with user your own identity name, no spaces (use: a..z).
+Make changes,
++ Replace the twilioAccountSid value with your subaccount SID (or if not using a subaccount, your account SID).
++ Replace the identity value with your own identity name, no spaces (use: a..z).
 
 Generate an test access token.
 
