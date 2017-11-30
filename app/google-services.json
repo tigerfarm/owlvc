@@ -1,21 +1,35 @@
-// Follow the steps in https://developers.google.com/mobile/add to generate your own google-services.json file.
 {
   "project_info": {
-    "project_number": "your_project_number",
-    "project_id": "your_project_id"
+    "project_number": "192503981150",
+    "firebase_url": "https://owlvc-cf1a3.firebaseio.com",
+    "project_id": "owlvc-cf1a3",
+    "storage_bucket": "owlvc-cf1a3.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "your_mobilesdk_app_id",
+        "mobilesdk_app_id": "1:192503981150:android:421f55001a5c718d",
         "android_client_info": {
           "package_name": "com.tigerfarmpress.voice.owlcall"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "192503981150-9g1u1quoiegtgku84lmesnk78ar0vdb9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tigerfarmpress.voice.owlcall",
+            "certificate_hash": "362e136cdf79241f3b9cdd30b409d82085d7c421"
+          }
+        },
+        {
+          "client_id": "192503981150-djjn1ib1r7sh6cr872aji8cke0a345q1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "your_current_key"
+          "current_key": "AIzaSyBDTNN1o_ygLLfBwz2IqEzKOWeC1pNY_4E"
         }
       ],
       "services": {
@@ -23,11 +37,16 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "192503981150-djjn1ib1r7sh6cr872aji8cke0a345q1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }
