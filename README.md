@@ -171,6 +171,90 @@ Go to Owl Call Settings.
 
 Owl Call is configured to make test calls. The next step is use a TwiML application that will place phone calls.
 
+### <a name="bullet7"></a>Create a Twilio Function to Place Phone Calls.
+
+Create a Twilio Function to say a message to the sample voice app when it makes its first test calls.
+
+Go to the Functions page:
+
+    [https://www.twilio.com/console/runtime/functions](https://www.twilio.com/console/runtime/functions)
+    
+    Click the Create Function icon (red circle with white plus sign).
+    In the New Function popup, click Blank, then click Create.
+    Enter the following:
+    Properties, Function Name: Say Hello and add a log message
+    URL Path: https://about-time-6360.twil.io  /sayhello
+    Configuration, Access control: uncheck to allow web browser access.
+    Code:
+    exports.handler = function(context, event, callback) {
+      	let twiml = new Twilio.twiml.VoiceResponse();
+	    console.log("---------------------------------------------------------");
+      	let callTo =  event.To || null;
+  	    if (callTo === null) {
+    	    twiml.say({voice: 'alice',language: 'en-CA',},'Error placing the call. The To-caller is required.');
+    	  	callback(null, twiml);
+          	return;
+ 	    }
+	    console.log("+ Call To: " + callTo);
+      	let callFrom =  event.From || null;
+  	    if (callFrom === null) {
+    	    twiml.say({voice: 'alice',language: 'en-CA',},'Error placing the call. The From-caller is required.');
+	      	callback(null, twiml);
+      	    return;
+ 	    }
+	    console.log("+ Call From: " + callFrom);
+	    //
+  	    // Set callerid phone number based on the Client id.
+  	    // Note, callerid must be a verified phone number, or in the same Twilio account.
+	    if (callFrom === "client:stacymobile") {
+    	    callFrom = "+12223331234";
+	    } else if (callFrom === "client:stacydavid") {
+    	    callFrom = "+17778887890";
+    	} else {
+	    	console.log("- Error: Client id not in the list.");
+    	    twiml.say({voice: 'alice',language: 'en-CA',},'Error placing the call. Unknown client id.');
+    	  	callback(null, twiml);
+          	return;
+        }
+ 	    console.log("+ Call From, caller id: " + callFrom);
+	    //
+        let dialParams = {};
+  	    dialParams.callerId = callFrom
+  	    dialParams.record = "do-not-record"
+    	if (callTo.startsWith("sip:")) {
+      	    // Example SIP address: "sip:myuser@mydomain.sip.us1.twilio.com"
+            console.log("+ Make a SIP call.");
+		    twiml.dial(dialParams).sip(callTo);
+	    } else if (callTo.startsWith("client:")) {
+            // Example Client address: client:stacyhere
+         	// Remove "client:"        01234567
+            console.log("+ Make a Client call.");
+	    	twiml.dial(dialParams).client(callTo.substr(7));
+	    } else {
+           console.log("+ Make a PSTN call.");
+	     	twiml.dial(dialParams, callTo);
+        }
+	    callback(null, twiml);
+    };
+    
+Test by using your browser to go to:
+
+    https://about-time-6360.twil.io/sayhello
+    Replace "about-time-6360.twil.io" with your Twilio Function host name.
+
+The response:
+
+    <?xml version="1.0" encoding="UTF-8"?><Response><Say>Hello World, and congratulations. Your Twilio voice app is working.</Say></Response>
+
+In the Twilio Console, under the Hello Voice World code section, a log entry is made:
+
+    + Call from, identity: undefined.
+
+In your browser, go to:
+
+    https://about-time-6360.twil.io/sayhello?From=here.
+    In the Twilio Console, a log entry is made: + Call from, identity: here.
+    This is debugging tool when testing the sample voice app.
 --------------------------------------------------
 
 Future features:
