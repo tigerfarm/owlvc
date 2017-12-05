@@ -210,6 +210,8 @@ Go to the Functions page:
         callFrom = "+12223331234";
     } else if (callFrom === "client:stacydavid") {
         callFrom = "+17778887890";
+    } else if (callTo.startsWith("client:")) {
+      	// Leave as is because this is a Client to Client call.
     } else {
         console.log("- Error: Client id not in the list.");
         twiml.say({voice: 'alice', language: 'en-CA', }, 'Error placing the call. Unknown client id.');
@@ -230,6 +232,10 @@ Go to the Functions page:
         // Remove "client:"        01234567
         console.log("+ Make a Client call.");
         twiml.dial(dialParams).client(callTo.substr(7));
+    } else if (callTo.startsWith("conference:")) {
+        // Example Client address: conference:weeklymeeting
+        console.log("+ Make a Conference call.");
+        twiml.dial(dialParams).conference(callTo.substr(7));
     } else {
         console.log("+ Make a PSTN call.");
         twiml.dial(dialParams, callTo);
