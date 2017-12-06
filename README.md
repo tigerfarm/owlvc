@@ -256,6 +256,71 @@ In the Twilio Console, log message are displayed: + Call To: client:stacydavid, 
 
 --------------------------------------------------
 
+### <a name="bullet7"></a>Configuration to Recieve Phone Calls.
+
+Step 1: Use Firebase to generate a google-services.json file
+
+    In Android Studio, select Tools/Firebase.
+    In Firebase Assistant, use Notifications to click Connect which redirects to the browser.
+    In the browser, log in to your Google account.
+    This brings you back to Android Studio which has a Firebase popup.
+    Your app is checked: Create new Firebase project. Click Connect to Firebase.
+    Studio runs for a while. At the base, is the message: Firebase project created...
+    Further configurations are available, which I'm not going to do:
+    https://console.firebase.google.com/?utm_source=studio&pli=1
+    https://developer.android.com/studio/login.html?success=true#
+
+Step 2: Configure Notifications.
+
+In the Firebase Console, click your project.
+
+https://console.firebase.google.com
+
+    Beside the Project Overview, click the gear icon and then click Project Settings.
+    Click Cloud Messaging.
+    The Legacy server key is the value to copy into the Twilio Console, steps following.
+
+    Goto the following and click Create:
+    
+https://www.twilio.com/console/voice/credentials
+
+    Properties, Friendly Name: Owl Call
+    Type: FCM
+    FCM Secret: use the Firebase FCM Server API Key, sample:
+AAAALNIhpF4:APA9 ... 2n_1-tmYb772fs
+    Click Save.
+    
+The Credential SID is now displayed:
+
+    Credential SID: CR1c244322fdcd12f14faed95731399f02
+   
+Use the Credential SID in the generate access token code.
+
+    ...
+    // Incoming application parameter
+    const pushCredentialSid = 'CR1c244322fdcd12f14faed95731399f02';
+    // Generate the access token with voice grants.
+    const AccessToken = require('twilio').jwt.AccessToken;
+    const VoiceGrant = AccessToken.VoiceGrant;
+    const voiceGrant = new VoiceGrant({
+       pushCredentialSid: pushCredentialSid,
+       outgoingApplicationSid: outgoingApplicationSid
+    });
+    ...
+
+Notifications are now configured.
+
+Configure Twilio phone number to call the Client.
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Response>
+        <Dial>
+            <Client>owlcalluser</Client>
+        </Dial>
+    </Response>
+
+--------------------------------------------------
+
 Future features:
 
     + Document how to configure for incoming calls, which includes notifications.
