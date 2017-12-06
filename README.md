@@ -29,6 +29,8 @@ Valid access tokens can now be generated for use to make phone calls.
 
 6. [Test using Owl Call.](#bullet6)
 
+7. [Set up to receive incoming phone calls.](#bullet7)
+
 ### <a name="bullet1"></a>Create a Subaccount
 
 To keep this sample separate from your main account, create a subaccount.
@@ -256,7 +258,9 @@ In the Twilio Console, log message are displayed: + Call To: client:stacydavid, 
 
 --------------------------------------------------
 
-### <a name="bullet7"></a>Configuration to Recieve Phone Calls.
+### <a name="bullet7"></a>Set up to Recieve Incomming Phone Calls.
+
+#### Configure Notifications.
 
 Step 1: Use Firebase to generate a google-services.json file
 
@@ -270,15 +274,21 @@ Step 1: Use Firebase to generate a google-services.json file
     https://console.firebase.google.com/?utm_source=studio&pli=1
     https://developer.android.com/studio/login.html?success=true#
 
-Step 2: Configure Notifications.
+Step 2: Get the Legacy server key.
 
 In the Firebase Console, click your project.
 
 https://console.firebase.google.com
 
+    Click the project icon, example: owlvc.
     Beside the Project Overview, click the gear icon and then click Project Settings.
     Click Cloud Messaging.
+    Legacy server key, sample:
+      AAAALNIhpF4:APA9 ... 2n_1-tmYb772fs
+
     The Legacy server key is the value to copy into the Twilio Console, steps following.
+
+Step 3: Use the Firebase Legacy server key to Create a Twilio Push Creditional for Notifications
 
     Goto the following and click Create:
     
@@ -287,14 +297,14 @@ https://www.twilio.com/console/voice/credentials
     Properties, Friendly Name: Owl Call
     Type: FCM
     FCM Secret: use the Firebase FCM Server API Key, sample:
-AAAALNIhpF4:APA9 ... 2n_1-tmYb772fs
+      AAAALNIhpF4:APA9 ... 2n_1-tmYb772fs
     Click Save.
     
-The Credential SID is now displayed:
+The Credential SID is now displayed, sample:
 
-    Credential SID: CR1c244322fdcd12f14faed95731399f02
-   
-Use the Credential SID in the generate access token code.
+    Credential SID: CR1c259383fdcd12f14krm957358373f02
+
+Use the Push Credential SID to generate access token code.
 
     ...
     // Incoming application parameter
