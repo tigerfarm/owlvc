@@ -208,12 +208,12 @@ Go to the Functions page:
     //
     // Set callerid phone number based on the Client id.
     // Note, callerid must be a verified phone number, or in the same Twilio account.
-    if (callFrom === "client:stacymobile") {
-        callFrom = "+12223331234";
+    if  (callTo.startsWith("client:")) {
+      	// Leave as is because this is a Client to Client call.
     } else if (callFrom === "client:stacydavid") {
         callFrom = "+17778887890";
-    } else if (callTo.startsWith("client:")) {
-      	// Leave as is because this is a Client to Client call.
+    } else if (callFrom === "client:stacymobile") {
+        callFrom = "+12223331234";
     } else {
         console.log("- Error: Client id not in the list.");
         twiml.say({voice: 'alice', language: 'en-CA', }, 'Error placing the call. Unknown client id.');
