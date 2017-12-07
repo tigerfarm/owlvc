@@ -38,7 +38,7 @@ To keep this sample separate from your main account, create a subaccount.
     Subaccount name: owlvc
     Example (not actual) account SID = "ACrt0e356hksr34d16d8d4t8l390284a3".
     
-### <a name="bullet5"></a>Create Twilio Function to generate access tokens using the above values.
+### <a name="bullet2"></a>Create Twilio Function to generate access tokens using the above values.
 
 Go to the Functions page:
 
