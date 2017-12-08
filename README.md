@@ -29,6 +29,8 @@ Valid access tokens can now be generated for use to make phone calls.
 
 6. [Test using Owl Call.](#bullet6)
 
+7. [Set up to receive incoming phone calls.](#bullet7)
+
 ### <a name="bullet1"></a>Create a Subaccount
 
 To keep this sample separate from your main account, create a subaccount.
@@ -36,7 +38,7 @@ To keep this sample separate from your main account, create a subaccount.
     Subaccount name: owlvc
     Example (not actual) account SID = "ACrt0e356hksr34d16d8d4t8l390284a3".
     
-### <a name="bullet5"></a>Create Twilio Function to generate access tokens using the above values.
+### <a name="bullet2"></a>Create Twilio Function to generate access tokens using the above values.
 
 Go to the Functions page:
 
@@ -171,12 +173,167 @@ Go to Owl Call Settings.
 
 Owl Call is configured to make test calls. The next step is use a TwiML application that will place phone calls.
 
+### <a name="bullet7"></a>Create a Twilio Function to Place Phone Calls.
+
+This Twilio Function generates TwiML to place a phone call.
+
+Go to the Functions page:
+
+    [https://www.twilio.com/console/runtime/functions](https://www.twilio.com/console/runtime/functions)
+    
+    Click the Create Function icon (red circle with white plus sign).
+    In the New Function popup, click Blank, then click Create.
+    Enter the following:
+    Properties, Function Name: Say Hello and add a log message
+    URL Path: https://about-time-6360.twil.io  /callandlog
+    Configuration, Access control: uncheck to allow web browser access.
+    Code:
+    exports.handler = function (context, event, callback) {
+    let twiml = new Twilio.twiml.VoiceResponse();
+    console.log("---------------------------------------------------------");
+    let callTo = event.To || null;
+    if (callTo === null) {
+        twiml.say({voice: 'alice', language: 'en-CA', }, 'Error placing the call. The To-caller is required.');
+        callback(null, twiml);
+        return;
+    }
+    console.log("+ Call To: " + callTo);
+    let callFrom = event.From || null;
+    if (callFrom === null) {
+        twiml.say({voice: 'alice', language: 'en-CA', }, 'Error placing the call. The From-caller is required.');
+        callback(null, twiml);
+        return;
+    }
+    console.log("+ Call From: " + callFrom);
+    //
+    // Set callerid phone number based on the Client id.
+    // Note, callerid must be a verified phone number, or in the same Twilio account.
+    if  (callTo.startsWith("client:")) {
+      	// Leave as is because this is a Client to Client call.
+    } else if (callFrom === "client:stacydavid") {
+        callFrom = "+17778887890";
+    } else if (callFrom === "client:stacymobile") {
+        callFrom = "+12223331234";
+    } else {
+        console.log("- Error: Client id not in the list.");
+        twiml.say({voice: 'alice', language: 'en-CA', }, 'Error placing the call. Unknown client id.');
+        callback(null, twiml);
+        return;
+    }
+    console.log("+ Call From, caller id: " + callFrom);
+    //
+    let dialParams = {};
+    dialParams.callerId = callFrom
+    dialParams.record = "do-not-record"
+    if (callTo.startsWith("sip:")) {
+        // Example SIP address: "sip:myuser@mydomain.sip.us1.twilio.com"
+        console.log("+ Make a SIP call.");
+        twiml.dial(dialParams).sip(callTo);
+    } else if (callTo.startsWith("client:")) {
+        // Example Client address: client:stacyhere
+        // Remove "client:"        01234567
+        console.log("+ Make a Client call.");
+        twiml.dial(dialParams).client(callTo.substr(7));
+    } else if (callTo.startsWith("conference:")) {
+        // Example Client address: conference:weeklymeeting
+        console.log("+ Make a Conference call.");
+        twiml.dial(dialParams).conference(callTo.substr(7));
+    } else {
+        console.log("+ Make a PSTN call.");
+        twiml.dial(dialParams, callTo);
+    }
+    callback(null, twiml);
+    };
+    
+Test by using your browser to go to:
+
+    https://satisfying-quartz-1625.twil.io/callandlog?To=client:stacydavid&From=client:mycat
+Replace "about-time-6360.twil.io" with your Twilio Function host name.
+
+The response, which is a Client to Client example:
+
+    <?xml version="1.0" encoding="UTF-8"?><Response><Dial callerId="client:mycat" record="do-not-record"><Client>stacydavid</Client></Dial></Response>
+
+In the Twilio Console, log message are displayed: + Call To: client:stacydavid, + Call From: client:mycat, + Call From, caller id: client:mycat, + Make a Client call.
+
+--------------------------------------------------
+
+### <a name="bullet7"></a>Set up to Recieve Incomming Phone Calls.
+
+#### Configure Notifications.
+
+Step 1: Use Firebase to generate a google-services.json file
+
+    In Android Studio, select Tools/Firebase.
+    In Firebase Assistant, use Notifications to click Connect which redirects to the browser.
+    In the browser, log in to your Google account.
+    This brings you back to Android Studio which has a Firebase popup.
+    Your app is checked: Create new Firebase project. Click Connect to Firebase.
+    Studio runs for a while. At the base, is the message: Firebase project created...
+    Further configurations are available, which I'm not going to do:
+    https://console.firebase.google.com/?utm_source=studio&pli=1
+    https://developer.android.com/studio/login.html?success=true#
+
+Step 2: Get the Legacy server key.
+
+In the Firebase Console, click your project.
+
+https://console.firebase.google.com
+
+    Click the project icon, example: owlvc.
+    Beside the Project Overview, click the gear icon and then click Project Settings.
+    Click Cloud Messaging.
+    Legacy server key, sample:
+      AAAALNIhpF4:APA9 ... 2n_1-tmYb772fs
+
+    The Legacy server key is the value to copy into the Twilio Console, steps following.
+
+Step 3: Use the Firebase Legacy server key to Create a Twilio Push Creditional for Notifications
+
+    Goto the following and click Create:
+    
+https://www.twilio.com/console/voice/credentials
+
+    Properties, Friendly Name: Owl Call
+    Type: FCM
+    FCM Secret: use the Firebase FCM Server API Key, sample:
+      AAAALNIhpF4:APA9 ... 2n_1-tmYb772fs
+    Click Save.
+    
+The Credential SID is now displayed, sample:
+
+    Credential SID: CR1c259383fdcd12f14krm957358373f02
+
+Use the Push Credential SID to generate access token code.
+
+    ...
+    // Incoming application parameter
+    const pushCredentialSid = 'CR1c244322fdcd12f14faed95731399f02';
+    // Generate the access token with voice grants.
+    const AccessToken = require('twilio').jwt.AccessToken;
+    const VoiceGrant = AccessToken.VoiceGrant;
+    const voiceGrant = new VoiceGrant({
+       pushCredentialSid: pushCredentialSid,
+       outgoingApplicationSid: outgoingApplicationSid
+    });
+    ...
+
+Notifications are now configured.
+
+Configure Twilio phone number to call the Client.
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Response>
+        <Dial>
+            <Client>owlcalluser</Client>
+        </Dial>
+    </Response>
+
 --------------------------------------------------
 
 Future features:
 
-    + Handle incoming calls.
-    + Notification of an incoming call.
+    + Document how to configure for incoming calls, which includes notifications.
     + Add Twilio account information to the Setting panel, same as Owl SMS. This will allow:
     ++ Listing call logs.
     ++ Using Twilio Lookup to get phone number information.
