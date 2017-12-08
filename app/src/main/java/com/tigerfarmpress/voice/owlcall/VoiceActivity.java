@@ -182,10 +182,20 @@ public class VoiceActivity extends AppCompatActivity {
                 // Snackbar.make(coordinatorLayout, "+ Position: "+itemPosition+" : " +itemValue, Snackbar.LENGTH_LONG).show();
                 // String toCall = itemValue.toString().trim();
                 // Snackbar.make(coordinatorLayout, "+ "+toCall+" "+toCall.indexOf("+")+1+" "+toCall.length(), Snackbar.LENGTH_LONG).show();
-                formPhoneNumber.setText( itemValue.substring(itemValue.lastIndexOf("+"), itemValue.trim().length()));
-                if ( itemValue.lastIndexOf(":") > 3) {
+                if (itemValue.lastIndexOf("+")<0){
+                    // Example: "stacyhere : sip:stacyhere@sdt.sip.us1.twilio.com"
+                    // Example: "stacyhere : client:stacyhere"
+                    // Example: "stacyhere : conference:stacyhere"
+                    formPhoneNumber.setText( itemValue.substring(itemValue.lastIndexOf(" : ")+" : ".length()+1, itemValue.trim().length()));
+                    if ( itemValue.lastIndexOf(":") > 3) {
+                        labelContactName.setText( itemValue.substring(0, itemValue.indexOf(":")));
+                    }
+                } else {
                     // Example: "David : Mobile + 12223331234" -> "David"
-                    labelContactName.setText( itemValue.substring(0, itemValue.lastIndexOf(":")));
+                    formPhoneNumber.setText( itemValue.substring(itemValue.lastIndexOf("+"), itemValue.trim().length()));
+                    if ( itemValue.lastIndexOf(":") > 3) {
+                        labelContactName.setText( itemValue.substring(0, itemValue.lastIndexOf(":")));
+                    }
                 }
             }
         });
@@ -282,36 +292,53 @@ public class VoiceActivity extends AppCompatActivity {
         StoreContacts.clear();
         cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null, null, null);
         while (cursor.moveToNext()) {
-            name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-            phonenumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER));
             String theType = cursor.getString(cursor.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_TYPE));
-            String typeLabel;
-            int typeMobile = ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE;
-            int phoneType = cursor.getInt(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
-            switch (phoneType)
-            {
-                case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
-                    typeLabel = "Home";
-                    break;
-                case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
-                    typeLabel = "Mobile";
-                    break;
-                case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
-                    typeLabel = "Work";
-                    break;
-                case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
-                    // For custom label, example: Work office or Work mobile
-                    typeLabel = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.LABEL));
-                    if (typeLabel.toLowerCase().contains("mobile")) {
-                        phoneType = typeMobile;
-                    }
-                    break;
-                default:
-                    typeLabel = "";
-            }
             if (theType == null || theType.equalsIgnoreCase("com.google")) {
                 // null is the value for the emulator.
                 // Don't add WhatsApp contacts ("com.whatsapp") because it duplicates the phone number.
+                name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                String phonenumber;
+                String typeLabel = "";
+                if (name.toLowerCase().startsWith("sip:")){
+                    // sip:stacyhere@sdt.sip.us1.twilio.com
+                    // stacyhere : sip:stacyhere@sdt.sip.us1.twilio.com
+                    phonenumber = name;
+                    name = name.substring("sip:".length(),name.indexOf("@"));
+                } else if (name.toLowerCase().startsWith("client:")){
+                    // client:stacyhere
+                    // stacyhere : client:stacyhere
+                    phonenumber = name;
+                    phonenumber = name.substring("client:".length(),name.length());
+                } else if (name.toLowerCase().startsWith("conference:")){
+                    // conference:stacyhere
+                    // conference : conference:stacyhere
+                    phonenumber = name;
+                    name = "Conference";
+                } else {
+                    phonenumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER));
+                    int phoneType = cursor.getInt(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
+                    switch (phoneType)
+                    {
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+                            typeLabel = "Home";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+                            typeLabel = "Mobile";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+                            typeLabel = "Work";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
+                            // For custom label, example: Work office or Work mobile
+                            typeLabel = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.LABEL));
+                            if (typeLabel.toLowerCase().contains("mobile")) {
+                                typeLabel = "Mobile";
+                            }
+                            break;
+                        default:
+                            typeLabel = "phoneType+"+phoneType+":";
+                    }
+                }
                 // StoreContacts.add(name + " : " + phonenumber + " : " + theType);
                 StoreContacts.add(name + " : " + typeLabel + " " + phonenumber);
             }
