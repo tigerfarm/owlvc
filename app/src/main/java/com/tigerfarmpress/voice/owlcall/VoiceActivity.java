@@ -307,8 +307,8 @@ public class VoiceActivity extends AppCompatActivity {
                 } else if (name.toLowerCase().startsWith("client:")){
                     // client:stacyhere
                     // stacyhere : client:stacyhere
-                    phonenumber = name;
-                    phonenumber = name.substring("client:".length(),name.length());
+                    phonenumber = name.toLowerCase();
+                    name = name.substring("client:".length(),name.length());
                 } else if (name.toLowerCase().startsWith("conference:")){
                     // conference:stacyhere
                     // conference : conference:stacyhere
