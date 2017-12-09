@@ -135,7 +135,6 @@ public class VoiceActivity extends AppCompatActivity {
 
         callActionRefresh = (FloatingActionButton) findViewById(R.id.action_refresh);
         callActionRefresh.setOnClickListener(callActionRefreshClickListener());
-
         callActionFab.setOnClickListener(callActionFabClickListener());
         hangupActionFab.setOnClickListener(hangupActionFabClickListener());
         speakerActionFab.setOnClickListener(speakerphoneActionFabClickListener());
@@ -302,7 +301,7 @@ public class VoiceActivity extends AppCompatActivity {
                 if (name.toLowerCase().startsWith("sip:")){
                     // sip:stacyhere@sdt.sip.us1.twilio.com
                     // stacyhere : sip:stacyhere@sdt.sip.us1.twilio.com
-                    phonenumber = name;
+                    phonenumber = name.toLowerCase();
                     name = name.substring("sip:".length(),name.indexOf("@"));
                 } else if (name.toLowerCase().startsWith("client:")){
                     // client:stacyhere
