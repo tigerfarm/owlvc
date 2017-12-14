@@ -258,7 +258,7 @@ In the Twilio Console, log message are displayed: + Call To: client:stacydavid, 
 
 --------------------------------------------------
 
-### <a name="bullet7"></a>Set up to Receive Incomming Phone Calls.
+### <a name="bullet7"></a>Set up to Receive Incoming Phone Calls.
 
 #### Configure Notifications.
 
