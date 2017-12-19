@@ -237,7 +237,7 @@ Go to the Functions page:
     } else if (callTo.startsWith("conference:")) {
         // Example Client address: conference:weeklymeeting
         console.log("+ Make a Conference call.");
-        twiml.dial(dialParams).conference(callTo.substr(7));
+        twiml.dial(dialParams).conference(callTo.substr(11));
     } else {
         console.log("+ Make a PSTN call.");
         twiml.dial(dialParams, callTo);
