@@ -237,7 +237,7 @@ Go to the Functions page:
     } else if (callTo.startsWith("conference:")) {
         // Example Client address: conference:weeklymeeting
         console.log("+ Make a Conference call.");
-        twiml.dial(dialParams).conference(callTo.substr(7));
+        twiml.dial(dialParams).conference(callTo.substr(11));
     } else {
         console.log("+ Make a PSTN call.");
         twiml.dial(dialParams, callTo);
@@ -258,7 +258,7 @@ In the Twilio Console, log message are displayed: + Call To: client:stacydavid, 
 
 --------------------------------------------------
 
-### <a name="bullet7"></a>Set up to Recieve Incomming Phone Calls.
+### <a name="bullet7"></a>Set up to Receive Incoming Phone Calls.
 
 #### Configure Notifications.
 
