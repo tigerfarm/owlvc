@@ -10,6 +10,7 @@
     <!-- Strings related to Settings -->
 
     <string name="labelTokenUrl">Access Token URL</string>
+    <string name="labelClientId">Client Identity</string>
     <string name="buttomUpdate">Update</string>
 
     <!-- ======================================================================================= -->

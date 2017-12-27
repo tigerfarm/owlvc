@@ -64,6 +64,10 @@ public class VoiceActivity extends AppCompatActivity {
     private static final int SNACKBAR_DURATION = 4000;
 
     private static final int MIC_PERMISSION_REQUEST_CODE = 1;
+    private static final int INTERNET_PERMISSION_REQUEST_CODE = 2;
+    private static final int STORAGE_PERMISSION_REQUEST_CODE = 3;
+    private static final int CONTACTS_PERMISSION_REQUEST_CODE = 4;
+
     private AudioManager audioManager;
     private int savedAudioMode = AudioManager.MODE_INVALID;
     private boolean isReceiverRegistered = false;
@@ -108,13 +112,26 @@ public class VoiceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voice);
 
+        if (!checkPermissionForContacts()) {
+            requestPermissionForContacts();
+        }
+        if (!checkPermissionForWriteStorage()) {
+            requestPermissionForStorage();
+        }
+        if (!checkPermissionForInternet()) {
+            requestPermissionForInternet();
+        }
+
         accountCredentials = new AccountCredentials(this);
         String theTokenUrl = accountCredentials.getTokenUrl();
         if (theTokenUrl.isEmpty()) {
             accountCredentials.setTokenUrl( "hello" );
-            Snackbar.make(coordinatorLayout, "+ Token URL set to :" + accountCredentials.getTokenUrl() + ":", SNACKBAR_DURATION).show();
             // Intent intent = new Intent(this, SettingsActivity.class);
             // startActivity(intent);
+        }
+        String theClientId = accountCredentials.getClientId();
+        if (theClientId.isEmpty()) {
+            accountCredentials.setClientId( "owluser" );
         }
 
         // ---------------------------------------------------------------------------------------------
@@ -158,7 +175,7 @@ public class VoiceActivity extends AppCompatActivity {
         // Displays a call dialog if the intent contains a call invite
         handleIncomingCallIntent(getIntent());
 
-        // Ensure the microphone permission is enabled
+        // Stacy: Ensure the microphone permission is enabled
         if (!checkPermissionForMicrophone()) {
             requestPermissionForMicrophone();
         } else {
@@ -169,7 +186,6 @@ public class VoiceActivity extends AppCompatActivity {
         // Load Contacts into ListView.
         StoreContacts = new ArrayList<String>();
         listView = (ListView)findViewById(R.id.listview1);
-        EnableContactPermission();
         LoadContacts();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             // https://stackoverflow.com/questions/20032270/why-my-android-setonitemclicklistener-doesnt-work
@@ -292,7 +308,7 @@ public class VoiceActivity extends AppCompatActivity {
         cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null, null, null);
         while (cursor.moveToNext()) {
             String theType = cursor.getString(cursor.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_TYPE));
-            if (theType == null || theType.equalsIgnoreCase("com.google")) {
+            if (theType == null || theType.contains("google")) {
                 // null is the value for the emulator.
                 // Don't add WhatsApp contacts ("com.whatsapp") because it duplicates the phone number.
                 name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
@@ -338,7 +354,7 @@ public class VoiceActivity extends AppCompatActivity {
                             typeLabel = "phoneType+"+phoneType+":";
                     }
                 }
-                // StoreContacts.add(name + " : " + phonenumber + " : " + theType);
+                // StoreContacts.add(name + " - " + theType + " : " + typeLabel + " " + phonenumber);
                 StoreContacts.add(name + " : " + typeLabel + " " + phonenumber);
             }
         }
@@ -353,54 +369,92 @@ public class VoiceActivity extends AppCompatActivity {
         listView.setAdapter(arrayAdapter);
     }
 
-    public void EnableContactPermission(){
-        if ( ActivityCompat.shouldShowRequestPermissionRationale( VoiceActivity.this, Manifest.permission.READ_CONTACTS) ) {
-            Snackbar.make(coordinatorLayout, "+ CONTACTS permission allows us to Access CONTACTS app.", Snackbar.LENGTH_LONG).show();
-        } else {
-            ActivityCompat.requestPermissions( VoiceActivity.this, new String[] {
-                    Manifest.permission.READ_CONTACTS}, RequestPermissionCode );
-        }
-    }
-
     // ---------------------------------------------------------------------------------------------
-    // Access permissions
+    // Stacy, step 1: Check for permission:
+    // Documentation: https://developer.android.com/training/permissions/requesting.html
 
     private boolean checkPermissionForMicrophone() {
-        int resultMic = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
-        return resultMic == PackageManager.PERMISSION_GRANTED;
+        // Stacy, step 1: Check for permission:
+        return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
     }
+    private boolean checkPermissionForContacts() {
+        return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
+    }
+    private boolean checkPermissionForWriteStorage() {
+        return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    }
+    private boolean checkPermissionForInternet() {
+        return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET);
+    }
+
+    // ----------------------------------
+    // Stacy, step 2: Request permission.
 
     private void requestPermissionForMicrophone() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
-            Snackbar.make(coordinatorLayout,
-                    "Microphone permissions needed. Please allow in your application settings.",
-                    SNACKBAR_DURATION).show();
+            // Offer the rationale for asking for requiring the permission:
+            Snackbar.make(coordinatorLayout, "Microphone permissions: please allow in your application settings.", SNACKBAR_DURATION).show();
         } else {
-            ActivityCompat.requestPermissions(
-                    this,
-                    new String[]{Manifest.permission.RECORD_AUDIO},
-                    MIC_PERMISSION_REQUEST_CODE);
+            // Ask for permission:
+            ActivityCompat.requestPermissions( this, new String[]{Manifest.permission.RECORD_AUDIO}, MIC_PERMISSION_REQUEST_CODE);
         }
     }
+    private void requestPermissionForContacts() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
+            Snackbar.make(coordinatorLayout, "Read contacts permissions: please allow in your application settings.", SNACKBAR_DURATION).show();
+        } else {
+            ActivityCompat.requestPermissions( this, new String[]{Manifest.permission.READ_CONTACTS}, CONTACTS_PERMISSION_REQUEST_CODE);
+        }
+    }
+    private void requestPermissionForStorage() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            Snackbar.make(coordinatorLayout, "External file storage permissions: please allow in your application settings.", SNACKBAR_DURATION).show();
+        } else {
+            ActivityCompat.requestPermissions( this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_REQUEST_CODE);
+        }
+    }
+    private void requestPermissionForInternet() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)) {
+            Snackbar.make(coordinatorLayout, "Internet access permissions: please allow in your application settings.", SNACKBAR_DURATION).show();
+        } else {
+            ActivityCompat.requestPermissions( this, new String[]{Manifest.permission.INTERNET}, INTERNET_PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    // ----------------------------------
+    // Stacy, step 3: Act on the user giving or denying, the permission.
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-        // Check if microphone permissions are granted
+        // Microphone permissions
         if (requestCode == MIC_PERMISSION_REQUEST_CODE && permissions.length > 0) {
             if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                Snackbar.make(coordinatorLayout,
-                        "Microphone permissions needed. Please allow in your application settings.",
-                        SNACKBAR_DURATION).show();
+                Snackbar.make(coordinatorLayout, "Microphone permissions needed. Please allow in your application settings.", SNACKBAR_DURATION).show();
             } else {
                 registerForCallInvites();
             }
         }
-
-        // Check if contacts access permissions are granted
-        if (requestCode == RequestPermissionCode && permissions.length > 0) {
+        // Contacts permissions
+        if (requestCode == CONTACTS_PERMISSION_REQUEST_CODE && permissions.length > 0) {
             if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                Snackbar.make(coordinatorLayout, "+ Permission Canceled, your application cannot access CONTACTS.", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(coordinatorLayout, "+ Permission Canceled, your application cannot access CONTACTS.", SNACKBAR_DURATION).show();
+            } else {
+                // Snackbar.make(coordinatorLayout, "+ Permission Granted, Now your application can access CONTACTS.", Snackbar.LENGTH_LONG).show();
+            }
+        }
+        // Contacts permissions
+        if (requestCode == STORAGE_PERMISSION_REQUEST_CODE && permissions.length > 0) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Snackbar.make(coordinatorLayout, "+ Permission Canceled, your application cannot access STORAGE.", SNACKBAR_DURATION).show();
+            } else {
+                // Snackbar.make(coordinatorLayout, "+ Permission Granted, Now your application can access CONTACTS.", Snackbar.LENGTH_LONG).show();
+            }
+        }
+        // Contacts permissions
+        if (requestCode == INTERNET_PERMISSION_REQUEST_CODE && permissions.length > 0) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Snackbar.make(coordinatorLayout, "+ Permission Canceled, your application cannot access the INTERNET.", SNACKBAR_DURATION).show();
             } else {
                 // Snackbar.make(coordinatorLayout, "+ Permission Granted, Now your application can access CONTACTS.", Snackbar.LENGTH_LONG).show();
             }
@@ -414,7 +468,7 @@ public class VoiceActivity extends AppCompatActivity {
         OkHttpClient client = new OkHttpClient.Builder()
                 .build();
         Request request = new Request.Builder()
-                .url(accountCredentials.getTokenUrl())
+                .url(accountCredentials.getCallTokenUrl())
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -458,7 +512,7 @@ public class VoiceActivity extends AppCompatActivity {
         OkHttpClient client = new OkHttpClient.Builder()
                 .build();
         Request request = new Request.Builder()
-                .url(accountCredentials.getTokenUrl())
+                .url(accountCredentials.getCallTokenUrl())
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override

@@ -50,6 +50,33 @@
                 android:text="hello"/>
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/LabelClientId"
+            android:text="@string/labelClientId"
+            android:layout_below="@+id/TwilioSid"
+            android:paddingTop="9px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="14sp"/>
+
+        <LinearLayout
+            android:id="@+id/ClientId"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:layout_below="@+id/LabelClientId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1">
+            <EditText
+                android:id="@+id/clientId"
+                android:textSize="@dimen/buttonTextSize"
+                android:layout_width="@dimen/editAccountFieldWidth"
+                android:layout_height="wrap_content"
+                android:text="owluser"/>
+        </LinearLayout>
+
+
     </RelativeLayout>
 
     <!-- =================================== -->

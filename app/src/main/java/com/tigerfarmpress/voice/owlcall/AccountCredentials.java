@@ -31,6 +31,7 @@ public class AccountCredentials implements Interceptor {
     private String accessToken;
     private String accessTokenHost;
     private String accessTokenAction;
+    private String clientId;
     private String credentials;
     //
     private String twilioPhoneNumber;
@@ -138,18 +139,34 @@ public class AccountCredentials implements Interceptor {
         this.accessTokenAction = aParam;
     }
 
-    public String getTokenUrl() {
+    // ----------------------------------------------------
+    // This is Client requirements.
+
+    public String getCallTokenUrl() {
         this.accessToken = getDecrypted("token_url");
         if (accessToken.equalsIgnoreCase("hello")) {
             this.accessToken = "https://" + getAccessTokenHost() + "/hello";
         } else if (accessToken.equalsIgnoreCase("call")) {
             this.accessToken = "https://" + getAccessTokenHost() + "/call";
         }
+        return this.accessToken + "?clientid=" + getDecrypted("client_id");
+    }
+    public String getTokenUrl() {
+        this.accessToken = getDecrypted("token_url");
         return this.accessToken;
     }
     public void setTokenUrl(String aParam) {
         setEncrypted("token_url", aParam);
         this.accessToken = aParam;
+    }
+
+    public String getClientId() {
+        this.clientId = getDecrypted("client_id");
+        return this.clientId;
+    }
+    public void setClientId(String aParam) {
+        setEncrypted("client_id", aParam);
+        this.clientId = aParam;
     }
 
     // ----------------------------------------------------

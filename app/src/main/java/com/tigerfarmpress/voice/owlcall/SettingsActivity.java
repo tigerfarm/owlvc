@@ -30,7 +30,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     ArrayAdapter<String> adapterValues;
 
     private Button updateButton;
-    private EditText tokenUrl;
+    private EditText tokenUrl, clientId;
     private TextView showResults;
 
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -47,12 +47,17 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         updateButton = (Button) findViewById(R.id.updateButton);
         updateButton.setOnClickListener(this);
         tokenUrl = (EditText)findViewById(R.id.tokenUrl);
+        clientId = (EditText)findViewById(R.id.clientId);
         showResults = (TextView)findViewById(R.id.showResults);
 
         accountCredentials = new AccountCredentials(this);
         String theTokenUrl = accountCredentials.getTokenUrl();
         if (!theTokenUrl.isEmpty()) {
-            tokenUrl.setText(accountCredentials.getTokenUrl());
+            tokenUrl.setText(theTokenUrl);
+        }
+        String theClientId = accountCredentials.getClientId();
+        if (!theClientId.isEmpty()) {
+            clientId.setText(theClientId);
         }
     }
 
@@ -69,6 +74,14 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         switch (view.getId()) {
             case R.id.updateButton:
                 showResults.setText("");
+
+                String theClientId = clientId.getText().toString().trim();
+                if (theClientId.isEmpty()) {
+                    showResults.setText("+ Client Identity is required.");
+                    return;
+                }
+                accountCredentials.setClientId( theClientId );
+
                 Snackbar.make(swipeRefreshLayout, "+ Validate token value...", Snackbar.LENGTH_LONG).show();
                 // hide keyboard
                 InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -98,8 +111,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         OkHttpClient client = new OkHttpClient.Builder()
                 .build();
         accountCredentials.setTokenUrl( theTokenUrl );
+        // Snackbar.make(swipeRefreshLayout, "+ Token URL: " + accountCredentials.getCallTokenUrl(), Snackbar.LENGTH_LONG).show();
         Request request = new Request.Builder()
-                .url(accountCredentials.getTokenUrl())
+                .url(accountCredentials.getCallTokenUrl())
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
