@@ -486,10 +486,7 @@ public class VoiceActivity extends AppCompatActivity {
                             Snackbar.make(coordinatorLayout, "+ Logging into your Twilio account failed. Go to Settings.", Snackbar.LENGTH_LONG).show();
                         } else {
                             // Snackbar.make(coordinatorLayout, "+ Got the Access Token.", Snackbar.LENGTH_LONG).show();
-                            //
-                            // {"accesstoken":"eyJhb ... eLEQ8"}
-                            // 01234567890123456789
-                            TWILIO_ACCESS_TOKEN = jsonResponse.substring(16, jsonResponse.length()-2);
+                            TWILIO_ACCESS_TOKEN = jsonResponse.trim();
                             //
                             // Example call-to phone number or addresses:
                             // twiMLParams.put("To", "+12223331234");
