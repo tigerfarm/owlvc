@@ -33,7 +33,7 @@ This is optional, however it recommended that you use (create) a subaccount as a
 
 In the Twilio Console, go to:
 
-    https://www.twilio.com/console/project/subaccounts
+[https://www.twilio.com/console/project/subaccounts](https://www.twilio.com/console/project/subaccounts)
 
 Create a subaccount:
 
@@ -92,7 +92,7 @@ In the Twilio Console, go to the Create TWiML Application page:
 [https://www.twilio.com/console/voice/runtime/twiml-apps](https://www.twilio.com/console/voice/runtime/twiml-apps)
 
     Enter the following:
-    Friendly name: HelloWorldApp 
+    Friendly name: Make a voice call 
     Voice, Request URL: https://about-time-6360.twil.io/makecall (note, use your domain here)
     After clicking Save, go back into the application entry to view the TwiML application API SID.
     Example: APxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -107,7 +107,7 @@ In the Twilio Console, go to:
 
 Enter:
 
-    Friendly name: owlvcapp
+    Friendly name: Voice call
     API key SID: SKxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     API key Secret: yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
 
