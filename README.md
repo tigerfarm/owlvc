@@ -12,9 +12,7 @@ This project is based on the Twilio SDK Voice sample. Owl Call's enhancements to
 
 ### Step-by-step guide to set up and generate voice access tokens
 
-Following are the steps to create the values and infrastructure components to generate access tokens which are used to make outgoing calls.
-
-In the following, example data is used, not live data.
+Following are the steps to create the values and infrastructure components to generate access tokens which are used to make outgoing calls. In the following, example data is used, not live data.
 
 1. [Create a Subaccount.](#bullet1)
 2. [Create a Twilio Function to generate access tokens.](#bullet2)
@@ -33,6 +31,12 @@ Valid access tokens can now be generated for use to make phone calls.
 
 This is optional, however it recommended that you use (create) a subaccount as a method to keep this sample separate from your main account.
 
+In the Twilio Console, go to:
+
+    https://www.twilio.com/console/project/subaccounts
+
+Create a subaccount:
+
     Subaccount name: owlvc
     Example (not actual) account SID = "ACrt0e356hksr34d16d8d4t8l390284a3".
     
@@ -45,7 +49,7 @@ You can view your Runtime Domain name at this link:
 
 Now, create the Function. In the Twilio Console, go to the Functions page:
 
-    [https://www.twilio.com/console/runtime/functions](https://www.twilio.com/console/runtime/functions)
+[https://www.twilio.com/console/runtime/functions](https://www.twilio.com/console/runtime/functions)
 
 1. Click the Create Function icon (circle with plus sign in the middle).
 2. Click Blank. Click Create.
@@ -54,6 +58,9 @@ Now, create the Function. In the Twilio Console, go to the Functions page:
    - For testing, uncheck Configuration, Access Control to allow accessible from a browser.
    - Copy and paste the contents of [generateVoiceToken.js](generateVoiceToken.js) into the Code box.
 3. Click Save.
+
+For reference, documentation link:
+[https://www.twilio.com/docs/api/rest/access-tokens](https://www.twilio.com/docs/api/rest/access-tokens)
 
 ### <a name="bullet3"></a>Create a Twilio Function to provide TwiML to make phone calls.
 
@@ -70,28 +77,19 @@ In the Console, go to:
 3. Click Save.
 4. Test by using your browser to go to:
 
-    https://about-time-6360.twil.io/makecall
-    Replace "about-time-6360.twil.io" with your Twilio Function domain name.
+    https://about-time-6360.twil.io/makecall (use your own Twilio Function domain name)
 
 The response:
 
-    <?xml version="1.0" encoding="UTF-8"?><Response> ... </Response>
+    <?xml version="1.0" encoding="UTF-8"?><Response><Say voice="alice" language="en-CA">Error placing the call. The To-caller is required.</Say></Response>
 
-In the Twilio Console, under the Hello Voice World code section, a log entry is made:
-
-    + Call from, identity: undefined.
-
-In your browser, go to:
-
-    https://about-time-6360.twil.io/sayhello?From=here.
-    In the Twilio Console, a log entry is made: + Call from, identity: here.
-    This is debugging tool when testing the sample voice app.
+When your application calls makecall, it will include the To-caller, and it will work.
 
 ### <a name="bullet4"></a>Create a TwiML Application entry to call the above Twilio Function.
 
 In the Twilio Console, go to the Create TWiML Application page:
 
-    [https://www.twilio.com/console/voice/runtime/twiml-apps](https://www.twilio.com/console/voice/runtime/twiml-apps)
+[https://www.twilio.com/console/voice/runtime/twiml-apps](https://www.twilio.com/console/voice/runtime/twiml-apps)
 
     Enter the following:
     Friendly name: HelloWorldApp 
@@ -105,20 +103,22 @@ Note, the TwiML application API SID will be used in a later step. The API SID wi
 
 In the Twilio Console, go to:
 
-    [https://www.twilio.com/console/voice/runtime/api-keys](https://www.twilio.com/console/voice/runtime/api-keys)
-    https://www.twilio.com/console/voice/runtime/api-keys/create
+[https://www.twilio.com/console/voice/runtime/api-keys/create](https://www.twilio.com/console/voice/runtime/api-keys/create)
+
+Enter:
+
     Friendly name: owlvcapp
     API key SID: SKxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     API key Secret: yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
 
-Note, the API key SID and Secret will be used in the next step. The API key SID and Secret will be used when generating access tokens. The  account SID, API key and secret are the authentication keys. They must be from the same account or subaccount (not a combination of account).
+Note, the API key SID and Secret string will be used in the next step. The API key SID and Secret will be used when generating access tokens. The  account SID, API key and secret are the authentication keys. They must be from the same account or subaccount (not a combination of account).
 
 ### <a name="bullet6"></a>Twilio Function Configuration
 
 Configure your account's Twilio Functions settings.
 In Twilio Console, go to:
     
-    https://www.twilio.com/console/runtime/functions/configure
+[https://www.twilio.com/console/runtime/functions/configure](https://www.twilio.com/console/runtime/functions/configure)
     
 Check: Enable ACCOUNT_SID and AUTH_TOKEN.
 - This allows your Functions to access your account SID and auth token as environment variables.
@@ -133,7 +133,7 @@ Create Function Environment Variables.
     VOICE_API_KEY : SKxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (SK value created above)
     VOICE_API_SECRET : yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy (secret key string value created above)
     
-    Click Save, to save the environment variables.
+Click Save, to save the environment variables.
 
 Generate an test access token.
 
@@ -141,7 +141,7 @@ Generate an test access token.
 
 Response sample:
 
-    {"accesstoken":"eyJhbJciOiJIUzI1NiIsInR5cCI6IkpXVCIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTSzc0Y2JjOTAzN2QyMWM3YmMzNWU0NWE4OTFkNGZiZTEzLTE1MTAwNzgxNzUiLCJncmFudHMiOnsiaWRlbnRpdHkiOiJzdGFjeWRhdmlkIiwidm9pY2UiOnsib3V0Z29kackdOnsiYXBwbGljYXRpb25fc2lkIjoiQVBlYjQ2Mjc2NTVhMmE0YmU1YWUxYmE5NjJmYzk1NzZjZiJ9fX0sImlhdCI6MTUxMDA3ODE3NSwiZXhwIjoxNTEwMDgxNzc1LCJpc3MiOiJTSzc0Y2JjOTAzN2QyMWM3YmMzNWU0NWE4OTFkNGZiZTEzIiwic3ViIjoiQUNlMmFkODFkNmEwYzQxZmMwZTllZWViNWQxOWYxMGY2MyJ9.PYO9Kje1qDjitjdvJJon90IEilvN9njp2YGuJZr8nTI"}
+    eyJhbJciOiJIUzI1NiIsInR5cCI6IkpXVCIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTSzc0Y2JjOTAzN2QyMWM3YmMzNWU0NWE4OTFkNGZiZTEzLTE1MTAwNzgxNzUiLCJncmFudHMiOnsiaWRlbnRpdHkiOiJzdGFjeWRhdmlkIiwidm9pY2UiOnsib3V0Z29kackdOnsiYXBwbGljYXRpb25fc2lkIjoiQVBlYjQ2Mjc2NTVhMmE0YmU1YWUxYmE5NjJmYzk1NzZjZiJ9fX0sImlhdCI6MTUxMDA3ODE3NSwiZXhwIjoxNTEwMDgxNzc1LCJpc3MiOiJTSzc0Y2JjOTAzN2QyMWM3YmMzNWU0NWE4OTFkNGZiZTEzIiwic3ViIjoiQUNlMmFkODFkNmEwYzQxZmMwZTllZWViNWQxOWYxMGY2MyJ9.PYO9Kje1qDjitjdvJJon90IEilvN9njp2YGuJZr8nTI
 
 Note, the above token will not work to make phone calls. You will need to create values in the following steps, and replace them into this Function.
 
@@ -156,11 +156,11 @@ Go to Owl Call Settings.
     Owl Call will get an Access Token and make the call using the test TwiML application (Say Hello).
     You will here your Hello message from the Twilio service.
 
-Owl Call is configured to make phone calls.
+Owl Call is now configured to make phone calls.
 
 --------------------------------------------------
 
-### <a name="bullet7"></a>Set up to Receive Incoming Phone Calls.
+### <a name="bullet8"></a>Set up to Receive Incoming Phone Calls.
 
 #### Configure Notifications.
 
