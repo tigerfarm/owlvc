@@ -130,12 +130,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void run() {
                         String theMsg;
-                        if ( jsonResponse.startsWith("{\"accesstoken\":") ) {
-                            // {"accesstoken":"eyJhb ... eLEQ8"}
-                            accountCredentials.setCredentials();
-                            theMsg = "+ Got the access token. Settings updated.";
-                        } else {
+                        if ( jsonResponse.startsWith("{") ) {
+                            // JSON error message.
                             theMsg = "- Failed to get an access token. Settings NOT updated.";
+                        } else {
+                            theMsg = "+ Got the access token. Settings updated.";
+                            accountCredentials.setCredentials();
                         }
                         showResults.setText(theMsg);
                         // Snackbar.make(swipeRefreshLayout, theMsg, Snackbar.LENGTH_LONG).show();

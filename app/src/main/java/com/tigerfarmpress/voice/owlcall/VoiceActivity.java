@@ -109,18 +109,19 @@ public class VoiceActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_voice);
 
-        if (!checkPermissionForContacts()) {
-            requestPermissionForContacts();
-        }
         if (!checkPermissionForWriteStorage()) {
             requestPermissionForStorage();
+        }
+        if (!checkPermissionForContacts()) {
+            requestPermissionForContacts();
         }
         if (!checkPermissionForInternet()) {
             requestPermissionForInternet();
         }
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_voice);
 
         accountCredentials = new AccountCredentials(this);
         String theTokenUrl = accountCredentials.getTokenUrl();
@@ -486,7 +487,9 @@ public class VoiceActivity extends AppCompatActivity {
                             Snackbar.make(coordinatorLayout, "+ Logging into your Twilio account failed. Go to Settings.", Snackbar.LENGTH_LONG).show();
                         } else {
                             // Snackbar.make(coordinatorLayout, "+ Got the Access Token.", Snackbar.LENGTH_LONG).show();
+                            // TWILIO_ACCESS_TOKEN = jsonResponse.substring(16, jsonResponse.length()-2);
                             TWILIO_ACCESS_TOKEN = jsonResponse.trim();
+                            Log.d(TAG, "TWILIO_ACCESS_TOKEN :" + TWILIO_ACCESS_TOKEN + ":");
                             //
                             // Example call-to phone number or addresses:
                             // twiMLParams.put("To", "+12223331234");
@@ -504,49 +507,7 @@ public class VoiceActivity extends AppCompatActivity {
         });
     }
 
-    private void getAccessTokenForReceiveCalls() {
-        // Snackbar.make(coordinatorLayout, "+ Get Access Token...", SNACKBAR_DURATION).show();
-        OkHttpClient client = new OkHttpClient.Builder()
-                .build();
-        Request request = new Request.Builder()
-                .url(accountCredentials.getCallTokenUrl())
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(okhttp3.Call call, IOException e) {
-                Snackbar.make(coordinatorLayout, "- Error: Network failure, try again.", SNACKBAR_DURATION).show();
-                call.cancel();
-            }
-            @Override
-            public void onResponse(okhttp3.Call call, Response response) throws IOException {
-                final String jsonResponse = response.body().string();
-                VoiceActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if ( jsonResponse.contains("\"code\": 20003") || jsonResponse.contains("\"status\": 404") ) {
-                            Snackbar.make(coordinatorLayout, "+ Logging into your Twilio account failed. Go to Settings.", Snackbar.LENGTH_LONG).show();
-                        } else {
-                            // Snackbar.make(coordinatorLayout, "+ Got the Access Token.", Snackbar.LENGTH_LONG).show();
-                            //
-                            // {"accesstoken":"eyJhb ... eLEQ8"}
-                            // 01234567890123456789
-                            TWILIO_ACCESS_TOKEN = jsonResponse.substring(16, jsonResponse.length()-2);
-                            //
-                            // Example call-to phone number or addresses:
-                            // twiMLParams.put("To", "+12223331234");
-                            // twiMLParams.put("To", "client:stacytest");
-                            // twiMLParams.put("To", "sip:stacytest@owlvc.sip.us1.twilio.com");
-                            String callPhoneNumber = formPhoneNumber.getText().toString();
-                            twiMLParams.put("To", callPhoneNumber);
-                            activeCall = Voice.call(VoiceActivity.this, TWILIO_ACCESS_TOKEN, twiMLParams, callListener);
-                            setCallUI();
-                            registerForCallInvites();
-                        }
-                    }
-                });
-            }
-        });
-    }    // ---------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
 
     // The UI state when there is an active call
     private void setCallUI() {
