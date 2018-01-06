@@ -485,22 +485,23 @@ public class VoiceActivity extends AppCompatActivity {
                     public void run() {
                         if ( jsonResponse.contains("\"code\": 20003") || jsonResponse.contains("\"status\": 404") ) {
                             Snackbar.make(coordinatorLayout, "+ Logging into your Twilio account failed. Go to Settings.", Snackbar.LENGTH_LONG).show();
-                        } else {
-                            // Snackbar.make(coordinatorLayout, "+ Got the Access Token.", Snackbar.LENGTH_LONG).show();
-                            // TWILIO_ACCESS_TOKEN = jsonResponse.substring(16, jsonResponse.length()-2);
-                            TWILIO_ACCESS_TOKEN = jsonResponse.trim();
-                            Log.d(TAG, "TWILIO_ACCESS_TOKEN :" + TWILIO_ACCESS_TOKEN + ":");
-                            //
-                            // Example call-to phone number or addresses:
-                            // twiMLParams.put("To", "+12223331234");
-                            // twiMLParams.put("To", "client:stacytest");
-                            // twiMLParams.put("To", "sip:stacytest@owlvc.sip.us1.twilio.com");
-                            String callPhoneNumber = formPhoneNumber.getText().toString();
-                            twiMLParams.put("To", callPhoneNumber);
-                            activeCall = Voice.call(VoiceActivity.this, TWILIO_ACCESS_TOKEN, twiMLParams, callListener);
-                            setCallUI();
-                            registerForCallInvites();
+                            Log.d(TAG, "- Login failed. :" + jsonResponse + ":");
+                            return;
                         }
+                        // Snackbar.make(coordinatorLayout, "+ Got the Access Token.", Snackbar.LENGTH_LONG).show();
+                        // TWILIO_ACCESS_TOKEN = jsonResponse.substring(16, jsonResponse.length()-2);
+                        TWILIO_ACCESS_TOKEN = jsonResponse.trim();
+                        // Log.d(TAG, "TWILIO_ACCESS_TOKEN :" + TWILIO_ACCESS_TOKEN + ":");
+                        //
+                        // Example call-to phone number or addresses:
+                        // twiMLParams.put("To", "+12223331234");
+                        // twiMLParams.put("To", "client:stacytest");
+                        // twiMLParams.put("To", "sip:stacytest@owlvc.sip.us1.twilio.com");
+                        String callPhoneNumber = formPhoneNumber.getText().toString();
+                        twiMLParams.put("To", callPhoneNumber);
+                        activeCall = Voice.call(VoiceActivity.this, TWILIO_ACCESS_TOKEN, twiMLParams, callListener);
+                        setCallUI();
+                        registerForCallInvites();
                     }
                 });
             }
