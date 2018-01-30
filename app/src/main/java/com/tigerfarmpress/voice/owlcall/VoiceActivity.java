@@ -65,8 +65,7 @@ public class VoiceActivity extends AppCompatActivity {
 
     private static final int MIC_PERMISSION_REQUEST_CODE = 1;
     private static final int INTERNET_PERMISSION_REQUEST_CODE = 2;
-    private static final int STORAGE_PERMISSION_REQUEST_CODE = 3;
-    private static final int CONTACTS_PERMISSION_REQUEST_CODE = 4;
+    private static final int CONTACTS_PERMISSION_REQUEST_CODE = 3;
 
     private AudioManager audioManager;
     private int savedAudioMode = AudioManager.MODE_INVALID;
@@ -110,26 +109,26 @@ public class VoiceActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        if (!checkPermissionForWriteStorage()) {
-            requestPermissionForStorage();
-        }
-        if (!checkPermissionForContacts()) {
-            requestPermissionForContacts();
-        }
-        if (!checkPermissionForInternet()) {
-            requestPermissionForInternet();
-        }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voice);
 
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                LoadContacts();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
         accountCredentials = new AccountCredentials(this);
-        String theTokenUrl = accountCredentials.getTokenUrl();
-        if (theTokenUrl.isEmpty()) {
+        if (accountCredentials.getTokenUrl().isEmpty()) {
             accountCredentials.setTokenUrl( "hello" );
+            startActivity(new Intent(this, SettingsActivity.class));
             // Intent intent = new Intent(this, SettingsActivity.class);
             // startActivity(intent);
         }
+        Snackbar.make(swipeRefreshLayout, "+ after accountCredentials", SNACKBAR_DURATION).show();
         String theClientId = accountCredentials.getClientId();
         if (theClientId.isEmpty()) {
             accountCredentials.setClientId( "owluser" );
@@ -179,8 +178,9 @@ public class VoiceActivity extends AppCompatActivity {
         // Stacy: Ensure the microphone permission is enabled
         if (!checkPermissionForMicrophone()) {
             requestPermissionForMicrophone();
+            return;
         } else {
-            registerForCallInvites();
+            RegistrationAccessToken(); // It also calls: registerForCallInvites();
         }
 
         // ---------------------------------------------------------------------------------------------
@@ -213,15 +213,6 @@ public class VoiceActivity extends AppCompatActivity {
                         labelContactName.setText( itemValue.substring(0, itemValue.lastIndexOf(":")));
                     }
                 }
-            }
-        });
-
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                LoadContacts();
-                swipeRefreshLayout.setRefreshing(false);
             }
         });
 
@@ -305,6 +296,11 @@ public class VoiceActivity extends AppCompatActivity {
     // ---------------------------------------------------------------------------------------------
 
     public void LoadContacts(){
+        if (!checkPermissionForContacts()) {
+            Snackbar.make(swipeRefreshLayout, "+ Request Permission For Contacts.", Snackbar.LENGTH_LONG).show();
+            requestPermissionForContacts();
+            return;
+        }
         StoreContacts.clear();
         cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null, null, null);
         while (cursor.moveToNext()) {
@@ -375,14 +371,10 @@ public class VoiceActivity extends AppCompatActivity {
     // Documentation: https://developer.android.com/training/permissions/requesting.html
 
     private boolean checkPermissionForMicrophone() {
-        // Stacy, step 1: Check for permission:
         return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
     }
     private boolean checkPermissionForContacts() {
         return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
-    }
-    private boolean checkPermissionForWriteStorage() {
-        return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
     private boolean checkPermissionForInternet() {
         return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET);
@@ -392,6 +384,7 @@ public class VoiceActivity extends AppCompatActivity {
     // Stacy, step 2: Request permission.
 
     private void requestPermissionForMicrophone() {
+        Snackbar.make(swipeRefreshLayout, "+ requestPermissionForMicrophone", SNACKBAR_DURATION).show();
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
             // Offer the rationale for asking for requiring the permission:
             Snackbar.make(coordinatorLayout, "Microphone permissions: please allow in your application settings.", SNACKBAR_DURATION).show();
@@ -401,20 +394,15 @@ public class VoiceActivity extends AppCompatActivity {
         }
     }
     private void requestPermissionForContacts() {
+        Snackbar.make(swipeRefreshLayout, "+ requestPermissionForContacts", SNACKBAR_DURATION).show();
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
             Snackbar.make(coordinatorLayout, "Read contacts permissions: please allow in your application settings.", SNACKBAR_DURATION).show();
         } else {
             ActivityCompat.requestPermissions( this, new String[]{Manifest.permission.READ_CONTACTS}, CONTACTS_PERMISSION_REQUEST_CODE);
         }
     }
-    private void requestPermissionForStorage() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            Snackbar.make(coordinatorLayout, "External file storage permissions: please allow in your application settings.", SNACKBAR_DURATION).show();
-        } else {
-            ActivityCompat.requestPermissions( this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_REQUEST_CODE);
-        }
-    }
     private void requestPermissionForInternet() {
+        Snackbar.make(swipeRefreshLayout, "+ requestPermissionForInternet", SNACKBAR_DURATION).show();
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)) {
             Snackbar.make(coordinatorLayout, "Internet access permissions: please allow in your application settings.", SNACKBAR_DURATION).show();
         } else {
@@ -433,7 +421,7 @@ public class VoiceActivity extends AppCompatActivity {
             if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                 Snackbar.make(coordinatorLayout, "Microphone permissions needed. Please allow in your application settings.", SNACKBAR_DURATION).show();
             } else {
-                registerForCallInvites();
+                RegistrationAccessToken(); // It also calls: registerForCallInvites();
             }
         }
         // Contacts permissions
@@ -444,15 +432,7 @@ public class VoiceActivity extends AppCompatActivity {
                 // Snackbar.make(coordinatorLayout, "+ Permission Granted, Now your application can access CONTACTS.", Snackbar.LENGTH_LONG).show();
             }
         }
-        // Contacts permissions
-        if (requestCode == STORAGE_PERMISSION_REQUEST_CODE && permissions.length > 0) {
-            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                Snackbar.make(coordinatorLayout, "+ Permission Canceled, your application cannot access STORAGE.", SNACKBAR_DURATION).show();
-            } else {
-                // Snackbar.make(coordinatorLayout, "+ Permission Granted, Now your application can access CONTACTS.", Snackbar.LENGTH_LONG).show();
-            }
-        }
-        // Contacts permissions
+        // Internet permissions
         if (requestCode == INTERNET_PERMISSION_REQUEST_CODE && permissions.length > 0) {
             if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                 Snackbar.make(coordinatorLayout, "+ Permission Canceled, your application cannot access the INTERNET.", SNACKBAR_DURATION).show();
@@ -465,6 +445,10 @@ public class VoiceActivity extends AppCompatActivity {
 
     // ---------------------------------------------------------------------------------------------
     private void getAccessToken() {
+        if (!checkPermissionForInternet()) {
+            requestPermissionForInternet();
+            return;
+        }
         // Snackbar.make(coordinatorLayout, "+ Get Access Token...", SNACKBAR_DURATION).show();
         OkHttpClient client = new OkHttpClient.Builder()
                 .build();
@@ -585,6 +569,43 @@ public class VoiceActivity extends AppCompatActivity {
     }
 
     // ---------------------------------------------------------------------------------------------
+    private void RegistrationAccessToken() {
+        // Snackbar.make(coordinatorLayout, "+ Get Access Token...", SNACKBAR_DURATION).show();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .build();
+        Request request = new Request.Builder()
+                .url(accountCredentials.getCallTokenUrl())
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(okhttp3.Call call, IOException e) {
+                Snackbar.make(coordinatorLayout, "- Error: Network failure, try again.", SNACKBAR_DURATION).show();
+                call.cancel();
+            }
+            @Override
+            public void onResponse(okhttp3.Call call, Response response) throws IOException {
+                final String jsonResponse = response.body().string();
+                VoiceActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if ( jsonResponse.contains("\"code\": 20003") || jsonResponse.contains("\"status\": 404") ) {
+                            Snackbar.make(coordinatorLayout, "+ Logging into your Twilio account failed. Go to Settings.", Snackbar.LENGTH_LONG).show();
+                            Log.d(TAG, "- Login failed. :" + jsonResponse + ":");
+                            return;
+                        }
+                        // Snackbar.make(coordinatorLayout, "+ Got the Access Token.", Snackbar.LENGTH_LONG).show();
+                        // TWILIO_ACCESS_TOKEN = jsonResponse.substring(16, jsonResponse.length()-2);
+                        TWILIO_ACCESS_TOKEN = jsonResponse.trim();
+                        // Log.d(TAG, "TWILIO_ACCESS_TOKEN :" + TWILIO_ACCESS_TOKEN + ":");
+                        //
+                        registerForCallInvites();
+                    }
+                });
+            }
+        });
+    }
+
+    // ---------------------------------------------------------------------------------------------
     // Register your FCM token with Twilio to receive incoming call invites
 
     /*
@@ -604,16 +625,12 @@ public class VoiceActivity extends AppCompatActivity {
         }
     }
 
-    // ------------
-    // Registration
-
     private RegistrationListener registrationListener() {
         return new RegistrationListener() {
             @Override
             public void onRegistered(String accessToken, String fcmToken) {
                 Log.d(TAG, "Successfully registered FCM " + fcmToken);
             }
-
             @Override
             public void onError(RegistrationException error, String accessToken, String fcmToken) {
                 String message = String.format("Registration Error: %d, %s", error.getErrorCode(), error.getMessage());
